@@ -9,7 +9,7 @@ class PLS_SC
 {
 	private $url;
 	private $data;
-	private $attrs;
+	private $attrs = array();
 
 	function __construct( $atts, $content, $tag )
 	{
@@ -51,18 +51,27 @@ class PLS_SC
 			$atts = array();
 
 		// prepare a separate array to for attributes
-		$this->attrs = $atts;
+		$attrs = $atts;
 		// remove reserved non-attributes
 		foreach ( array( 0,'post_id','slug','text' ) as $key )
-			unset( $this->attrs[ $key ] );
+			unset( $attrs[ $key ] );
+
+		// compensate for shortcodes not liking attributes with hyphens
+		foreach ( $attrs as $name => $value )
+		{
+			$htmlattr = str_replace('_', '-', $name);
+			$this->attrs[ $htmlattr ] = $value;
+		}
 		
 		// everything else
 		$data = array_diff_assoc( $atts, $this->attrs );
 
 		// allow "shorthand" for post_id / slug
-		if ( !$this->archive && isset( $atts[0] ) ) {
-			$key = is_numeric( $atts[0] ) ? 'post_id' : 'slug';
-			$data[ $key ] = $atts[0];
+		if ( !$this->archive && isset( $atts[0] ) )
+		{
+			$value        = $this->do_att_shortcode( $atts[0] );
+			$key          = is_numeric( $value ) ? 'post_id' : 'slug';
+			$data[ $key ] = $value;
 			unset( $data[0] );
 		}
 		 
@@ -171,9 +180,9 @@ class PLS_SC
 
 		// dynamic
 		if ( $this->archive )
-			return apply_filters( 'pls/post_type_name',		$this->obj->labels->name, $this->get_filter_data() );
+			return apply_filters( 'pls/archive_text',	$this->obj->labels->name, $this->get_filter_data() );
 		else
-			return apply_filters( 'pls/post_title_text',	$this->obj->post_title, $this->get_filter_data() );
+			return apply_filters( 'pls/single_text',	$this->obj->post_title, $this->get_filter_data() );
 	}
 
 	public function get_attrs()

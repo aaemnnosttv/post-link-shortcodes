@@ -13,12 +13,14 @@ class PostLinkShortcodes
 		$this->types = get_post_types( array('show_ui' => true) );
 		$this->register_dynamic_shortcodes();
 
-		// default filters
-		add_filter( 'pls/link_text',		'do_shortcode' );
+		/**
+		 * Default filters
+		 */
+		add_filter( 'pls/link_text',	'do_shortcode' );
 		// clone the_title filters
-		add_filter( 'pls/post_title_text',	'wptexturize'   );
-		add_filter( 'pls/post_title_text',	'convert_chars' );
-		add_filter( 'pls/post_title_text',	'trim'          );
+		add_filter( 'pls/single_text',	'wptexturize'   );
+		add_filter( 'pls/single_text',	'convert_chars' );
+		add_filter( 'pls/single_text',	'trim'          );
 	}
 
 	/**
