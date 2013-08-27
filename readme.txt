@@ -21,7 +21,7 @@ Each post type will have 4 shortcodes created for it where `posttype` is the nam
 [posttype_archive_link]`
 
 
-== Attributes & Usage ==
+= Attributes & Usage =
 
 Depending on what kind of returned information is desired, the right shortcode will need to be used and some attributes may be required.
 
@@ -76,8 +76,11 @@ will produce: `<a href="url-to-post" id="mylink" class="blue special" target="_b
 
 Any attribute you set will be added to the element with the exception of those specifically used by PLS - ie: 'slug', 'post_id', or 'text'. 'href' is also ignored as a shortcode attribute as it is set dynamically!
 
-Politician CPT
-`[candidate_link charles-mchutchence class=good-guy style="color: gray;" data-can-water-ski=1]`
+**Note: for html attributes with hyphens, like `data-target` for example, you need to use an underscore instead *when defining it in shortcode* (see below) - otherwise this can and probably will break things.**
+This is the only time you'll need to make a substituion/compensation and it only applies to the attribute name, not the value. 
+
+**Politician CPT**
+`[candidate_link charles-mchutchence class=good-guy style="color: gray;" data_can_water_ski=1]`
 
 Now we're getting silly, but you get the idea.
 `<a href="queried-url" class="great-guy" style="color: gray;" data-can-water-ski="1">Charles McHutchence</a>`
