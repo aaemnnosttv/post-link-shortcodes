@@ -60,8 +60,11 @@ class PostLinkShortcodes
 			$output = $sc->get_link();
 
 		/**
-		 * @filter 'pls/output'
 		 * Final output
+		 * 
+		 * @filter 'pls/output'
+		 * @param (string) output
+		 * @param (array) current shortcode object variables
 		 */
 		return apply_filters( 'pls/output', $output, $sc->get_filter_data() );
 	}
