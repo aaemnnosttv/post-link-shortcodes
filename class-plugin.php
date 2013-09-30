@@ -2,7 +2,7 @@
 
 /**
  * Plugin Class
- * @package  Post Link Shortcodes 
+ * @package  Post Link Shortcodes
  */
 
 
@@ -61,7 +61,7 @@ class PostLinkShortcodes
 
 		/**
 		 * Final output
-		 * 
+		 *
 		 * @filter 'pls/output'
 		 * @param (string) output
 		 * @param (array) current shortcode object variables

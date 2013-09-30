@@ -14,9 +14,9 @@ class PLS_SC
 	function __construct( $atts, $content, $tag )
 	{
 		$this->setup_props( $tag );
-		
+
 		$this->setup_data( $atts, $content );
-		
+
 		// backup
 		$this->data['orig'] = array(
 			'atts'    => $atts,
@@ -63,7 +63,7 @@ class PLS_SC
 		/**
 		 * From here on, attribute names use hyphens
 		 */
-		
+
 		// everything else
 		$data = array_diff_assoc( $atts, $this->attrs );
 
@@ -75,7 +75,7 @@ class PLS_SC
 			$data[ $key ] = $value;
 			unset( $data[0] );
 		}
-		 
+
 		// If someone took the time to use an enclosed shortcode, that denotes precedence
 		// Allow alternate inner text to be set with a text="" att
 		// Defaults to post title for single, or post type name for archive
@@ -128,7 +128,7 @@ class PLS_SC
 
 		/**
 		 * The URL
-		 *  
+		 *
 		 * @filter 'pls/url'
 		 * @param (mixed) the URL if found, or (bool) false on failure
 		 * @param (array) current shortcode object variables
@@ -162,10 +162,10 @@ class PLS_SC
 
 		/**
 		 * Inner link text/html
-		 * 
+		 *
 		 * do_shortcode is applied by default
 		 * @see  __construct()
-		 * 
+		 *
 		 * @filter 'pls/link_text'
 		 * @param (string)	inner 	current inner html of link
 		 * @param (array)	array() current shortcode object variables
@@ -174,7 +174,7 @@ class PLS_SC
 
 		/**
 		 * The final link markup
-		 * 
+		 *
 		 * @filter 'pls/link'
 		 * @param (string) markup
 		 * @param (array) current shortcode object variables
@@ -185,7 +185,7 @@ class PLS_SC
 	/**
 	 * Determine inner html for the link
 	 */
-	function get_inner() 
+	function get_inner()
 	{
 		// static - [sc]$content[/sc] takes precedence over [sc text=""]
 		if ( !empty( $this->data['inner'] ) )
@@ -221,17 +221,17 @@ class PLS_SC
 
 		/**
 		 * Optionally restrict html attributes to only those defined here
-		 * 
+		 *
 		 * This is a whitelist of allowed attribute names. All others will be removed.
-		 * 
+		 *
 		 * To use: return a 1 dimensional array of allowed html attributes
 		 * Ex: return array('href','id','class')
-		 * 
+		 *
 		 * @filter 'pls/allowed_link_attributes'
 		 * @param (array)	array()	empty array to be filled with html attribute names to whitelist
 		 * @param (array)	$attrs	current set of html attribute => value
 		 * @param (array)	array() current shortcode object variables
-		 * 
+		 *
 		 * *** MAKE SURE TO INCLUDE 'href' IF YOU USE THIS! ***
 		 */
 		$allowed = apply_filters( 'pls/allowed_link_attributes', array(), $attrs, $this->get_filter_data() );
@@ -247,15 +247,15 @@ class PLS_SC
 		 * Optionally forbid specific attributes
 		 *
 		 * This is a blacklist of attribute names.
-		 * 
+		 *
 		 * To use: return a 1 dimensional array of html attributes to exclude
 		 * Ex: return array('style','height','width')
-		 * 
+		 *
 		 * @filter 'pls/exclude_link_attributes'
 		 * @param (array)	array()	empty array to be filled with html attribute names to blacklist
 		 * @param (array)	$attrs	current set of html attribute => value
 		 * @param (array)	array() current shortcode object variables
-		 * 
+		 *
 		 * May be used together with 'pls/allowed_link_attributes' filter as well
 		 */
 		$exclude = apply_filters( 'pls/exclude_link_attributes', array(), $attrs, $this->get_filter_data() );
