@@ -110,13 +110,13 @@ class PLS_SC
 				);
 				extract( shortcode_atts( $d, $this->data ) );
 
-				if ( !$post_id && $slug ) {
-					$found = get_posts( array(
+				$found = ( !$post_id && $slug )
+					? get_posts( array(
 						'name'           => $slug,
 						'post_type'      => $this->type,
 						'posts_per_page' => 1
-					));
-				}
+					))
+					: false;
 
 				$obj = $found ? $found[0] : get_post( $post_id );
 				$url = get_permalink( $obj );
