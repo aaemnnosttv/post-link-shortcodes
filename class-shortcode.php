@@ -118,7 +118,7 @@ class PLS_SC
 					))
 					: false;
 
-				$obj = $found ? $found[0] : get_post( $post_id );
+				$obj = isset( $found[0] ) ? $found[0] : get_post( $post_id );
 				$url = get_permalink( $obj );
 			}
 			// store results
