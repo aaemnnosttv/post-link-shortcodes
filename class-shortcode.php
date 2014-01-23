@@ -95,7 +95,7 @@ class PLS_SC
 	 */
 	function get_url()
 	{
-		if ( is_null( $this->url ) )
+		if ( !isset( $this->url ) )
 		{
 			if ( $this->archive )
 			{
@@ -104,22 +104,31 @@ class PLS_SC
 			}
 			else
 			{
-				$d = array(
+				extract( shortcode_atts( array(
 					'post_id' => '',
 					'slug'    => '',
-				);
-				extract( shortcode_atts( $d, $this->data ) );
+				), $this->data ) );
 
-				$found = ( !$post_id && $slug )
-					? get_posts( array(
+				// setup the object
+				if ( $post_id )
+					$obj = get_post( $post_id );
+				else
+				{
+					// search by post name "slug"
+					$slug_query = array(
 						'name'           => $slug,
 						'post_type'      => $this->type,
 						'posts_per_page' => 1
-					))
-					: false;
+					);
+					// query
+					$slug_results = get_posts( $slug_query );
+					
+					$obj = ( isset( $slug_results[0]->ID ) )
+						? $slug_results[0]
+						: false;
+				}
 
-				$obj = isset( $found[0] ) ? $found[0] : get_post( $post_id );
-				$url = get_permalink( $obj );
+				$url = is_object( $obj ) ? get_permalink( $obj ) : false;
 			}
 			// store results
 			$this->obj = $obj;
