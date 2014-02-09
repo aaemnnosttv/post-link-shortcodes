@@ -102,12 +102,12 @@ class PostLinkShortcodes
 		if ( false === $url = $sc->get_url() )
 		{
 			/**
-			 * @filter 'pls/not_found'
+			 * @filter 'pls/output/not_found'
 			 * @since  0.3.1
 			 * @param string returned output for a target that is not found
 			 * @param (array) current shortcode object variables
 			 */
-			return apply_filters( 'pls/not_found', '', $sc->get_filter_data() ); // not found
+			return apply_filters( 'pls/output/not_found', '', $sc->get_filter_data() ); // not found
 		}
 
 		if ( 'url' == $sc->request )
