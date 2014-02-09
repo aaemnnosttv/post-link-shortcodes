@@ -1,5 +1,5 @@
 === Plugin Name ===
-Stable tag: 0.3
+Stable tag: 0.3.1
 Contributors: aaemnnosttv
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LRA4JZYALHX82
 Tags: post link, post url, custom post type link, custom post type url, shortcodes
