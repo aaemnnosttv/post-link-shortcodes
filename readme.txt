@@ -4,7 +4,7 @@ Contributors: aaemnnosttv
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LRA4JZYALHX82
 Tags: post link, post url, custom post type link, custom post type url, shortcodes
 Requires at least: 2.9
-Tested up to: 3.6.1
+Tested up to: 3.8.1
 License: GPLv2 or later
 
 A plugin for dynamically adding a collection of shortcodes for building links to a given post/archive (of any type) or simply returning the URL!
