@@ -4,7 +4,7 @@ Contributors: aaemnnosttv
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LRA4JZYALHX82
 Tags: post link, post url, custom post type link, custom post type url, shortcodes
 Requires at least: 2.9
-Tested up to: 3.8.1
+Tested up to: 3.9
 License: GPLv2 or later
 
 A plugin for dynamically adding a collection of shortcodes for building links to a given post/archive (of any type) or simply returning the URL!
@@ -35,7 +35,7 @@ Depending on what kind of returned information is desired, the right shortcode w
 `[post_url slug="hello-world"]`
 `[page_url slug="sample-page"]`
 **"Shorthand" (slug|ID) - no attribute name!**
-`[post_url hello-world]` or `[post_url 1]` 
+`[post_url hello-world]` or `[post_url 1]`
 `[page_url sample-page]` or `[page_url 2]`
 
 = Archive =
@@ -77,7 +77,7 @@ will produce: `<a href="url-to-post" id="mylink" class="blue special" target="_b
 Any attribute you set will be added to the element with the exception of those specifically used by PLS - ie: 'slug', 'post_id', or 'text'. 'href' is also ignored as a shortcode attribute as it is set dynamically!
 
 **Note: for html attributes with hyphens, like `data-target` for example, you need to use an underscore instead *when defining it in shortcode* (see below) - otherwise this can and probably will break things.**
-This is the only time you'll need to make a substituion/compensation and it only applies to the attribute name, not the value. 
+This is the only time you'll need to make a substituion/compensation and it only applies to the attribute name, not the value.
 
 **Politician CPT**
 `[candidate_link charles-mchutchence class=good-guy style="color: gray;" data_can_water_ski=1]`
@@ -108,7 +108,7 @@ PLS has several filters to control the output.
 * `pls/output` - final returned output
 * `pls/output/not_found` - markup to return in the event the target is not found. Default: `''` (empty string)
 
-Each filter callback accepts at least 2 parameters, some 3.  See the source for more information about each filter.  It's well documented! 
+Each filter callback accepts at least 2 parameters, some 3.  See the source for more information about each filter.  It's well documented!
 
 **Link Attribute Control:**
 
