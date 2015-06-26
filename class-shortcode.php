@@ -236,7 +236,7 @@ class PLS_SC
 	function get_inner()
 	{
 		// static - [sc]$content[/sc] takes precedence over [sc text=""]
-		if ( !empty( $this->data['inner'] ) )
+		if ( ! empty( $this->data['inner'] ) )
 			return $this->data['inner'];
 
 
@@ -289,7 +289,7 @@ class PLS_SC
 		if ( $allowed && is_array( $allowed ) )
 		{
 			foreach ( array_keys( $attrs ) as $k )
-				if ( !in_array( $k, $allowed ) )
+				if ( ! in_array( $k, $allowed ) )
 					unset( $attrs[ $k ] );
 		}
 
