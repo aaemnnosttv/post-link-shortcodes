@@ -31,6 +31,7 @@ class PostLinkShortcodes
 		/**
 		 * Default filters
 		 */
+		add_filter( 'pls/url', 'pls_attachment_src' );
 		add_filter( 'pls/link_text', 'do_shortcode' );
 		// clone the_title filters
 		add_filter( 'pls/single_text', 'wptexturize' );
@@ -267,6 +268,27 @@ function PostLinkShortcodes()
 
 	return $plugin;
 }
+
+/**
+ * Filter callback for pls/url
+ *
+ * Returns attachment src for attachments
+ *
+ * @param $url
+ * @param $data
+ *
+ * @return mixed
+ */
+function pls_attachment_src( $url, $data )
+{
+	if ( $attachment_src = wp_get_attachment_url( get_post_field('ID', $data['obj']) ) ) {
+		$url = $attachment_src;
+	}
+
+	return $url;
+}
+
+/**
  * Register a NEW shortcode as an alias of a PLS shortcode
  *
  * Optionally define default values for attributes &/or prefix/suffix them
