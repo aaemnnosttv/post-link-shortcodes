@@ -38,6 +38,9 @@ class PostLinkShortcodes
 		add_filter( 'pls/single_text', 'trim' );
 	}
 
+	/**
+	 * Collect all post types
+	 */
 	public function capture_types()
 	{
 		$this->types = get_post_types( array('show_ui' => true), 'objects' );
@@ -115,7 +118,7 @@ class PostLinkShortcodes
 	{
 		$sc = new PLS_SC( $atts, $content, $tag );
 
-		if ( false === $url = $sc->get_url() )
+		if ( ! $url = $sc->get_url() )
 		{
 			/**
 			 * @filter 'pls/output/not_found'
@@ -123,7 +126,7 @@ class PostLinkShortcodes
 			 * @param string returned output for a target that is not found
 			 * @param (array) current shortcode object variables
 			 */
-			return apply_filters( 'pls/output/not_found', '', $sc->get_filter_data() ); // not found
+			return apply_filters( 'pls/output/not_found', '', $sc->get_filter_data() );
 		}
 
 		if ( 'url' == $sc->request )
@@ -143,26 +146,27 @@ class PostLinkShortcodes
 
 	/**
 	 * Alias shortcode callback handler
-	 * @param  [type] $atts    [description]
-	 * @param  [type] $content [description]
-	 * @param  [type] $tag     [description]
-	 * @return [type]          [description]
+	 *
+	 * @param $atts
+	 * @param $content
+	 * @param $tag
+	 *
+	 * @return string [type]          [description]
 	 */
 	function alias_handler( $atts, $content, $tag )
 	{
-		if ( !isset( $this->aliases[ $tag ] ) )
+		if ( ! isset( $this->aliases[ $tag ] ) )
 			return;
 
-		extract( $this->aliases[ $tag ] );
-		// $alias_of
-		// $defaults
+		$alias_of = $this->aliases[ $tag ]['alias_of'];
+		$defaults = $this->aliases[ $tag ]['defaults'];
 
 		// make sure the alias target exists
-		if ( !in_array( $alias_of, $this->shortcodes['all'] ) )
+		if ( ! in_array( $alias_of, $this->shortcodes['all'] ) )
 			return;
 
 		// will be '' if no atts in sc string
-		if ( !is_array( $atts ) )
+		if ( ! is_array( $atts ) )
 			$atts = array();
 
 		/**
@@ -200,11 +204,10 @@ class PostLinkShortcodes
 	/**
 	 * Register an alias of a PLS shortcode to another tag
 	 * Optionally allow defaults &/or pre/suffixed values!
-	 * @param  [type] $tag      [description]
-	 * @param  [type] $alias_of [description]
-	 * @param  array  $atts     [description]
-	 * @param  string $content  [description]
-	 * @return [type]           [description]
+	 *
+	 * @param      $tag
+	 * @param      $alias_of
+	 * @param bool $defaults
 	 */
 	function alias( $tag, $alias_of, $defaults = false )
 	{
@@ -213,7 +216,7 @@ class PostLinkShortcodes
 			'defaults' => $defaults,
 		);
 
-		add_shortcode( $tag, array(&$this, 'alias_handler') );
+		add_shortcode( $tag, array($this, 'alias_handler') );
 	}
 
 	function get_flag( $a )
