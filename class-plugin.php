@@ -26,6 +26,7 @@ class PostLinkShortcodes
 	public function setup_hooks()
 	{
 		add_action( 'wp_loaded'     , array($this, 'capture_types') );
+		add_action( 'admin_notices' , array($this, 'report_conflicts') );
 
 		/**
 		 * Default filters
@@ -38,49 +39,70 @@ class PostLinkShortcodes
 	}
 
 	function capture_types()
+	public function capture_types()
 	{
-		$this->types = get_post_types( array('show_ui' => true) );
+		$this->types = get_post_types( array('show_ui' => true), 'objects' );
 		$this->register_dynamic_shortcodes();
 		// Yes m'lord?
 		do_action( 'pls/ready' );
 	}
 
 	/**
-	 * Registers 4 shortcodes for each registered post type
-	 *
-	 * [posttype_url]
-	 * [posttype_link]
-	 * [posttype_archive_url]
-	 * [posttype_archive_link]
+	 * Registers shortcodes for each captured post type
 	 *
 	 * Shortcodes by the same name that are already registered will not be overridden.
 	 */
 	function register_dynamic_shortcodes()
 	{
-		global $shortcode_tags;
-		$conflicts = array();
-
 		foreach ( $this->types as $type )
 		{
-			foreach ( array('url','link') as $request )
-			{
-				foreach ( array("{$type}_$request","{$type}_archive_$request") as $tag )
-				{
-					$this->shortcodes['all'][] = $tag;
-
-					if ( !self::shortcode_exists( $tag, $shortcode_tags ) )
-					{
-						add_shortcode( $tag, array(&$this, 'handler') );
-						$this->shortcodes['registered'][] = $tag;
-					}
-					else
-						$conflicts[ $tag ] = $shortcode_tags[ $tag ];
-				}
-			}
+			$this->register_shortcodes_for_type( $type );
 		}
+	}
 
-		if ( count( $conflicts ) )
-			do_action( 'pls/conflicts', $conflicts );
+	/**
+	 * Registers shortcodes for the given post type
+	 *
+	 * At a minimum, the type will get these:
+	 * [{type}_url]
+	 * [{type}_link]
+	 *
+	 * If the post type was registered with `has_archive`,
+	 * these two will also be registered:
+	 * [{type}_archive_url]
+	 * [{type}_archive_link]
+	 *
+	 * @param $type  post type object
+	 */
+	protected function register_shortcodes_for_type( $type )
+	{
+		foreach ( array( 'url', 'link' ) as $request )
+		{
+			$this->register_shortcode( "{$type->name}_$request" );
+
+			if ( $type->has_archive )
+				$this->register_shortcode( "{$type->name}_archive_$request" );
+		}
+	}
+
+	/**
+	 * @param       $tag
+	 */
+	protected function register_shortcode( $tag )
+	{
+		global $shortcode_tags;
+
+		$this->shortcodes[ 'all' ][ ] = $tag;
+
+		if ( ! shortcode_exists( $tag, $shortcode_tags ) )
+		{
+			add_shortcode( $tag, array($this, 'handler') );
+			$this->shortcodes[ 'registered' ][ ] = $tag;
+		}
+		else
+		{
+			$this->conflicts[ $tag ] = $shortcode_tags[ $tag ];
+		}
 	}
 
 	/**
@@ -210,14 +232,16 @@ class PostLinkShortcodes
 	}
 
 	/**
-	 * [shortcode_exists description]
-	 * @param  [type] $tag [description]
-	 * @return [type]      [description]
+	 * Provides feedback about shortcodes which couldn't be registered
+	 * without overriding existing ones.
 	 */
-	static function shortcode_exists( $tag )
+	protected function report_conflicts()
 	{
-		global $shortcode_tags;
-		return array_key_exists( $tag, $shortcode_tags );
+		if ( count( $this->conflicts ) ) {
+			do_action( 'pls/conflicts', $this->conflicts );
+		}
+	}
+
 	/**
 	 * @deprecated 0.4.0
 	 */
