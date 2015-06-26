@@ -103,7 +103,7 @@ class PLS_SC
 	 */
 	function get_url()
 	{
-		if ( !isset( $this->url ) )
+		if ( ! isset( $this->url ) )
 		{
 			if ( $this->archive )
 			{
@@ -112,28 +112,23 @@ class PLS_SC
 			}
 			else
 			{
-				extract( shortcode_atts( array(
-					'post_id' => '',
-					'slug'    => '',
-				), $this->data ) );
-
 				// setup the object
-				if ( $post_id )
-					$obj = get_post( $post_id );
+				if ( $this->data['post_id'] )
+				{
+					$obj = get_post( $this->data['post_id'] );
+				}
 				else
 				{
 					// search by post name "slug"
 					$slug_query = array(
-						'name'           => $slug,
+						'name'           => $this->data['slug'],
 						'post_type'      => $this->type,
 						'posts_per_page' => 1
 					);
 					// query
-					$slug_results = get_posts( $slug_query );
+					$slug_results = (array) get_posts( $slug_query );
 					
-					$obj = ( isset( $slug_results[0]->ID ) )
-						? $slug_results[0]
-						: false;
+					$obj = reset( $slug_results );
 				}
 
 				$url = is_object( $obj ) ? get_permalink( $obj ) : false;
@@ -215,6 +210,7 @@ class PLS_SC
 
 		// dynamic
 		if ( $this->archive )
+		{
 			/**
 			 * Archive link text
 			 * @filter 'pls/archive_text'
@@ -223,15 +219,16 @@ class PLS_SC
 			 * @param (array) current shortcode object variables
 			 */
 			return apply_filters( 'pls/archive_text', $this->obj->labels->name, $this->obj, $this->get_filter_data() );
-		else
-			/**
-			 * Single post link text
-			 * @filter 'pls/single_text'
-			 * @param (string) post title
-			 * @param (object) post object
-			 * @param (array) current shortcode object variables
-			 */
-			return apply_filters( 'pls/single_text', $this->obj->post_title, $this->obj, $this->get_filter_data() );
+		}
+
+		/**
+		 * Single post link text
+		 * @filter 'pls/single_text'
+		 * @param (string) post title
+		 * @param (object) post object
+		 * @param (array) current shortcode object variables
+		 */
+		return apply_filters( 'pls/single_text', $this->obj->post_title, $this->obj, $this->get_filter_data() );
 	}
 
 	function get_attrs()
