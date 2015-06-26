@@ -25,7 +25,7 @@ class PostLinkShortcodes
 
 	public function setup_hooks()
 	{
-		add_action( 'init', array(&$this, 'capture_types'), 500 );
+		add_action( 'wp_loaded'     , array($this, 'capture_types') );
 
 		/**
 		 * Default filters
