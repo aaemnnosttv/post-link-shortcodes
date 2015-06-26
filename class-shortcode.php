@@ -321,8 +321,7 @@ class PLS_SC
 		if ( $exclude && is_array( $exclude ) )
 		{
 			foreach ( $exclude as $e )
-				if ( array_key_exists( $e, $attrs ) )
-					unset( $attrs[ $e ] );
+				unset( $attrs[ $e ] );
 		}
 
 		// sanitize attribute values
