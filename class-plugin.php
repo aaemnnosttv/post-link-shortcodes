@@ -30,11 +30,11 @@ class PostLinkShortcodes
 		/**
 		 * Default filters
 		 */
-		add_filter( 'pls/link_text',	'do_shortcode'  );
+		add_filter( 'pls/link_text', 'do_shortcode' );
 		// clone the_title filters
-		add_filter( 'pls/single_text',	'wptexturize'   );
-		add_filter( 'pls/single_text',	'convert_chars' );
-		add_filter( 'pls/single_text',	'trim'          );
+		add_filter( 'pls/single_text', 'wptexturize' );
+		add_filter( 'pls/single_text', 'convert_chars' );
+		add_filter( 'pls/single_text', 'trim' );
 	}
 
 	function capture_types()
