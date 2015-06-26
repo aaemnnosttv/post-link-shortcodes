@@ -21,22 +21,32 @@ class PLS_SC
 
 	function __construct( $atts, $content, $tag )
 	{
-		$this->setup_props( $tag );
+		if ( ! is_array( $atts ) )
+			$atts = array();
 
-		$this->setup_data( $atts, $content );
-
-		// backup
 		$this->data['orig'] = array(
 			'atts'    => $atts,
 			'content' => $content,
 			'tag'     => $tag,
 		);
+
+		$this->setup_props( $tag );
+
+		$this->setup_data( $atts );
+
+		$this->setup_attributes( $atts );
+
+		$this->setup_shorthand( $atts );
+
+		$this->setup_inner( $content );
 	}
 
 	/**
 	 * Extract data bits from shortcode tag name
+	 *
+	 * @param $tag  Shortcode name
 	 */
-	function setup_props( $tag )
+	protected function setup_props( $tag )
 	{
 		$this->tag     = $tag;
 		$pieces        = explode( '_', $tag );
@@ -47,54 +57,76 @@ class PLS_SC
 
 	/**
 	 * Separates attributes and control data from shortcode atts
-	 * @param  [type] $atts [description]
-	 * @return [type]       [description]
+	 *
+	 * @param $atts
 	 */
-	function setup_data( $atts, $content )
+	protected function setup_data( array $atts )
 	{
-		if ( ! is_array( $atts ) )
-			$atts = array();
+		foreach ( $this->reserved_attributes as $key )
+		{
+			if ( ! array_key_exists($key, $this->data) )
+				$this->data[ $key ] = null;
+		}
 
-		// prepare a separate array to for attributes
-		$attrs = $atts;
+		$non_attrs  = array_diff_assoc( $atts, $this->attrs );
+		$this->data = array_merge( $this->data, $non_attrs );
+	}
+
+	/**
+	 * @param $attributes
+	 *
+	 * @return array
+	 */
+	protected function setup_attributes( array $attributes )
+	{
 		// remove reserved non-attributes
-		foreach ( array( 0,'post_id','slug','text' ) as $key )
-			unset( $attrs[ $key ] );
+		foreach ( $this->reserved_attributes as $key ) {
+			unset( $attributes[ $key ] );
+		}
 
 		// compensate for shortcodes not liking attributes with hyphens
-		foreach ( $attrs as $name => $value )
-		{
-			$htmlattr = str_replace('_', '-', $name);
-			$this->attrs[ $htmlattr ] = $value;
+		foreach ( $attributes as $name => $value ) {
+			$attribute_name                 = str_replace( '_', '-', $name );
+			$this->attrs[ $attribute_name ] = $value;
 		}
+	}
 
-		/**
-		 * From here on, attribute names use hyphens
-		 */
-
-		// everything else
-		$data = array_diff_assoc( $atts, $this->attrs );
-
-		// allow "shorthand" for post_id / slug
-		if ( !$this->archive && isset( $atts[0] ) )
+	/**
+	 * Translates shorthand post_id/slug into their attribute equivalents
+	 *
+	 * @param $atts
+	 */
+	protected function setup_shorthand( $atts )
+	{
+		if ( ! $this->archive && isset( $atts[ 0 ] ) )
 		{
-			$value        = $this->do_att_shortcode( $atts[0] );
-			$key          = is_numeric( $value ) ? 'post_id' : 'slug';
-			$data[ $key ] = $value;
-			unset( $data[0] );
+			$value              = $this->do_att_shortcode( $atts[ 0 ] );
+			$key                = is_numeric( $value ) ? 'post_id' : 'slug';
+			$this->data[ $key ] = $value;
+			unset( $this->data[ 0 ] );
 		}
+	}
 
+	/**
+	 * Determines and sets what should be used for the element's inner content
+	 *
+	 * @param $content
+	 *
+	 * @return mixed
+	 */
+	protected function setup_inner( $content )
+	{
 		// If someone took the time to use an enclosed shortcode, that denotes precedence
 		// Allow alternate inner text to be set with a text="" att
 		// Defaults to post title for single, or post type name for archive
 		if ( '' !== $content )
-			$data['inner'] = $content;
-		else
-			$data['inner'] = isset( $atts['text'] )
-								? $this->do_att_shortcode( $atts['text'] )
-								: '';
+			$this->data['inner'] = $content;
 
-		$this->data = $data;
+		elseif ( ! empty( $this->data['orig']['atts']['text'] ) )
+			$this->data['inner'] = $this->do_att_shortcode( $this->data['orig']['atts']['text'] );
+
+		else
+			$this->data['inner'] = '';
 	}
 
 	/**
