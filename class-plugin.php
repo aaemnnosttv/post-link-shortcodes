@@ -112,7 +112,7 @@ class PostLinkShortcodes
 	 * @param  string 	$tag     	shortcode tag
 	 * @return string 				url / html
 	 */
-	public static function handler( $atts, $content, $tag )
+	public function handler( $atts, $content, $tag )
 	{
 		$sc = new PLS_SC( $atts, $content, $tag );
 
