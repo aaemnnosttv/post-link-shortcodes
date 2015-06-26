@@ -7,9 +7,17 @@
 
 class PLS_SC
 {
-	private $url;
-	private $data;
-	private $attrs = array();
+	protected $tag;
+	protected $url;
+	protected $data = array();
+	protected $attrs = array();
+	protected $request;
+	protected $archive;
+	protected $type;
+	protected $obj;
+	protected $_url;
+
+	protected $reserved_attributes = array( 0, 'post_id', 'slug', 'text' );
 
 	function __construct( $atts, $content, $tag )
 	{
@@ -296,4 +304,12 @@ class PLS_SC
 		}
 		return $content;
 	}
+
+	function __get( $name )
+	{
+		return property_exists($this, $name)
+			? $this->{$name}
+			: null;
+	}
+
 } // PLS_SC
