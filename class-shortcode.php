@@ -103,6 +103,7 @@ class PLS_SC
 			$value              = $this->do_att_shortcode( $atts[ 0 ] );
 			$key                = is_numeric( $value ) ? 'post_id' : 'slug';
 			$this->data[ $key ] = $value;
+			unset( $this->attrs[ 0 ] );
 			unset( $this->data[ 0 ] );
 		}
 	}
@@ -196,17 +197,17 @@ class PLS_SC
 		$attrs = $this->get_attrs();
 
 		// build html attribute string
-		$attr = '';
+		$attr_pairs = array();
 		foreach ( $attrs as $name => $value )
 		{
 			$value = $this->do_att_shortcode( $value );
 
-			if ( strlen($value) )
-				$attr .= sprintf('%s="%s" ', $name, $value);
-			else
-				$attr .= $name;
+			if ( is_numeric($name) && strlen($value) )
+				$attr_pairs[ ] = $value;
+			elseif ( ! is_numeric($name) && strlen($value) )
+				$attr_pairs[ ] = sprintf('%s="%s" ', $name, $value);
 		}
-		$attr = trim( $attr );
+		$html_attributes = trim( join(' ', $attr_pairs) );
 
 		/**
 		 * Inner link text/html
@@ -227,7 +228,7 @@ class PLS_SC
 		 * @param (string) markup
 		 * @param (array) current shortcode object variables
 		 */
-		return apply_filters( 'pls/link', "<a $attr>$inner</a>", $this->get_filter_data() );
+		return apply_filters( 'pls/link', "<a $html_attributes>$inner</a>", $this->get_filter_data() );
 	}
 
 	/**
