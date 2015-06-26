@@ -38,7 +38,6 @@ class PostLinkShortcodes
 		add_filter( 'pls/single_text', 'trim' );
 	}
 
-	function capture_types()
 	public function capture_types()
 	{
 		$this->types = get_post_types( array('show_ui' => true), 'objects' );
