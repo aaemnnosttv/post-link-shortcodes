@@ -291,6 +291,7 @@ class PLS_SC
 		 * *** MAKE SURE TO INCLUDE 'href' IF YOU USE THIS! ***
 		 */
 		$allowed = apply_filters( 'pls/allowed_link_attributes', array(), $attrs, $this->get_filter_data() );
+		$allowed = apply_filters( 'pls/link/attributes/allowed', $allowed, $attrs, $this->get_filter_data() );
 
 		if ( $allowed && is_array( $allowed ) )
 		{
@@ -315,6 +316,7 @@ class PLS_SC
 		 * May be used together with 'pls/allowed_link_attributes' filter as well
 		 */
 		$exclude = apply_filters( 'pls/exclude_link_attributes', array(), $attrs, $this->get_filter_data() );
+		$exclude = apply_filters( 'pls/link/attributes/disallow', $exclude, $attrs, $this->get_filter_data() );
 
 		if ( $exclude && is_array( $exclude ) )
 		{
