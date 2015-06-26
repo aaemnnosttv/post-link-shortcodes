@@ -32,4 +32,4 @@ require_once( 'class-shortcode.php' );
 /**
  * Initialize plugin!
  */
-PostLinkShortcodes::get_instance();
+PostLinkShortcodes();

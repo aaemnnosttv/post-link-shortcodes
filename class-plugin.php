@@ -8,27 +8,20 @@
 
 class PostLinkShortcodes
 {
+	/* @deprecated 0.4.0 */
+	protected static $instance;
 
 	var $types;
-	private static $instance;
 	private $shortcodes = array(
 		'all'        => array(),
 		'registered' => array(),
 	);
 	private $aliases = array();
 
-	/**
-	 * There can be only one...
-	 */
-	public static function get_instance()
-	{
-        if ( !is_a( self::$instance, __CLASS__ ) )
-            self::$instance = new self();
 
-        return self::$instance;
-	}
+	public function __construct() {}
 
-	private function __construct()
+	public function setup_hooks()
 	{
 		add_action( 'init', array(&$this, 'capture_types'), 500 );
 
@@ -223,11 +216,29 @@ class PostLinkShortcodes
 	{
 		global $shortcode_tags;
 		return array_key_exists( $tag, $shortcode_tags );
+	/**
+	 * @deprecated 0.4.0
+	 */
+	public static function get_instance()
+	{
+		return PostLinkShortcodes();
 	}
 
 } // PostLinkShortcodes
 
 /**
+ * @return PostLinkShortcodes
+ */
+function PostLinkShortcodes()
+{
+	static $plugin;
+	if ( ! $plugin ) {
+		$plugin = new PostLinkShortcodes();
+		$plugin->setup_hooks();
+	}
+
+	return $plugin;
+}
  * Register a NEW shortcode as an alias of a PLS shortcode
  *
  * Optionally define default values for attributes &/or prefix/suffix them
@@ -256,5 +267,5 @@ class PostLinkShortcodes
  */
 function pls_add_shortcode_alias( $tag, $alias_of, $defaults = false )
 {
-	PostLinkShortcodes::get_instance()->alias( $tag, $alias_of, $defaults );
+	PostLinkShortcodes()->alias( $tag, $alias_of, $defaults );
 }
