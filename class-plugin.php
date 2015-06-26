@@ -31,7 +31,7 @@ class PostLinkShortcodes
 		/**
 		 * Default filters
 		 */
-		add_filter( 'pls/url', 'pls_attachment_src' );
+		add_filter( 'pls/url', 'pls_attachment_src', 10, 2 );
 		add_filter( 'pls/link_text', 'do_shortcode' );
 		// clone the_title filters
 		add_filter( 'pls/single_text', 'wptexturize' );
