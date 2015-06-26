@@ -165,7 +165,11 @@ class PLS_SC
 		foreach ( $attrs as $name => $value )
 		{
 			$value = $this->do_att_shortcode( $value );
-			$attr .= sprintf('%s="%s" ', $name, $value);
+
+			if ( strlen($value) )
+				$attr .= sprintf('%s="%s" ', $name, $value);
+			else
+				$attr .= $name;
 		}
 		$attr = trim( $attr );
 
