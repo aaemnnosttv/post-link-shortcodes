@@ -264,10 +264,15 @@ class PLS_SC
 		return apply_filters( 'pls/single_text', $this->obj->post_title, $this->obj, $this->get_filter_data() );
 	}
 
+	/**
+	 * Get sanitized, qualified attributes
+	 *
+	 * @return array
+	 */
 	function get_attrs()
 	{
 		// base attributes
-		// a shortcode-defined href is overriden by permalink
+		// a shortcode-defined href is overridden by the url
 		$attrs = array_merge( $this->attrs, array('href' => $this->url) );
 
 		/**
@@ -324,6 +329,10 @@ class PLS_SC
 
 	/**
 	 * Allow shortcodes to be used inside shortcode attribute values by using {{}} instead of []
+	 *
+	 * @param $content
+	 *
+	 * @return
 	 */
 	function do_att_shortcode( $content )
 	{
