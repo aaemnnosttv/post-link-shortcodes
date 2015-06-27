@@ -229,8 +229,10 @@ class PostLinkShortcode
 
 		return null;
 	}
+
+	/**
 	 * Get the target url
-	 * @return (string|bool) The permalink URL, or false on failure (if the target doesn't exist).
+	 * @return bool (string|bool) The permalink URL, or false on failure (if the target doesn't exist).
 	 */
 	function get_url()
 	{
@@ -250,6 +252,10 @@ class PostLinkShortcode
 		return esc_url( $url );
 	}
 
+	/**
+	 * Get current data relevant for filter callbacks
+	 * @return array
+	 */
 	function get_filter_data()
 	{
 		return get_object_vars( $this );
@@ -268,7 +274,7 @@ class PostLinkShortcode
 		 * Inner link text/html
 		 *
 		 * do_shortcode is applied by default
-		 * @see  __construct()
+		 * @see  PostLinkShortcode::setup_hooks
 		 *
 		 * @filter 'pls/link_text'
 		 * @param (string)	inner 	current inner html of link
@@ -432,7 +438,7 @@ class PostLinkShortcode
 	 *
 	 * @param $content
 	 *
-	 * @return
+	 * @return string
 	 */
 	function do_att_shortcode( $content )
 	{
