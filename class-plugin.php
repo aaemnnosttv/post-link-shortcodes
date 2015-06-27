@@ -81,10 +81,7 @@ class PostLinkShortcodes
 	 */
 	function register_dynamic_shortcodes()
 	{
-		foreach ( $this->types as $type )
-		{
-			$this->register_shortcodes_for_type( $type );
-		}
+		array_map( array($this, 'register_shortcodes_for_type'), $this->types );
 	}
 
 	/**
