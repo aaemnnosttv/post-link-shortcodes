@@ -15,6 +15,11 @@ class PostLinkShortcode
 	protected $archive;
 	protected $type;
 	protected $obj;
+
+	/* html element name */
+	protected $element;
+	/* html attribute which should receive the url */
+	protected $url_attribute;
 	/* shortcode attributes reserved for output control */
 	protected $reserved_keys = [ 'post_id', 'slug', 'inner', 'text' ];
 	protected $_url;
@@ -33,6 +38,8 @@ class PostLinkShortcode
 
 		$this->setup_props( $tag );
 
+		$this->setup_element();
+
 		$this->setup_data( $atts );
 
 		$this->setup_attributes( $atts );
@@ -49,9 +56,30 @@ class PostLinkShortcode
 	{
 		$this->tag     = $tag;
 		$pieces        = explode( '_', $tag );
-		$this->request = array_pop( $pieces ); // (url|link)
+		$this->request = array_pop( $pieces ); // (url|link|src|img)
 		$this->archive = ( count( $pieces ) > 1 && 'archive' == array_pop( $pieces ) ); // bool
 		$this->type    = implode( '_', $pieces ); // post type
+	}
+
+	/**
+	 * Setup element-related properties for this request
+	 */
+	protected function setup_element()
+	{
+		switch ( $this->request )
+		{
+			case 'link' :
+				$this->element = 'a';
+				$this->url_attribute = 'href';
+				break;
+			case 'img' :
+				$this->element = 'img';
+				$this->url_attribute = 'src';
+				break;
+		}
+
+		if ( $this->url_attribute )
+			array_push($this->reserved_keys, $this->url_attribute);
 	}
 
 	/**
@@ -135,6 +163,13 @@ class PostLinkShortcode
 		}
 
 		if ( ! $obj = $this->get_object() ) return;
+
+		if (
+			('attachment' == $this->type && in_array($this->request, array('src','img')))
+			|| ('attachment' == $this->type && 'link' == $this->request && 'src' == $this->data['href'] )
+		) {
+			return $this->url = wp_get_attachment_url( $obj->ID );
+		}
 
 		return $this->url = ( $obj instanceof WP_Post ) ? get_permalink( $obj ) : false;
 	}
@@ -224,6 +259,20 @@ class PostLinkShortcode
 		 * @param (array) current shortcode object variables
 		 */
 		return apply_filters( 'pls/link', "<a $html_attributes>$inner</a>", $this->get_filter_data() );
+	}
+
+	public function get_img()
+	{
+		$html_attributes = $this->format_html_attributes( $this->get_attrs() );
+
+		/**
+		 * The final image markup
+		 *
+		 * @filter 'pls/img'
+		 * @param (string) markup
+		 * @param (array) current shortcode object variables
+		 */
+		return apply_filters( 'pls/img', "<$this->element $html_attributes>", $this->get_filter_data() );
 	}
 
 	/**

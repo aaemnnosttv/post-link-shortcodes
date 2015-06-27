@@ -76,11 +76,17 @@ class PostLinkShortcodes
 	}
 
 	/**
-	 *
+	 * Register all our shortcodes
 	 */
 	public function register_shortcodes()
 	{
 		$this->register_dynamic_shortcodes();
+
+		if ( isset( $this->types['attachment'] ) )
+		{
+			$this->register_shortcode('attachment_src');
+			$this->register_shortcode('attachment_img');
+		}
 	}
 
 	/**
@@ -149,7 +155,7 @@ class PostLinkShortcodes
 	{
 		$sc = new PostLinkShortcode( $atts, $content, $tag );
 
-		if ( ! $url = $sc->get_url() )
+		if ( ! $sc->get_object() )
 		{
 			/**
 			 * @filter 'pls/output/not_found'
@@ -160,10 +166,30 @@ class PostLinkShortcodes
 			return apply_filters( 'pls/output/not_found', '', $sc->get_filter_data() );
 		}
 
-		if ( 'url' == $sc->request )
-			$output = $url;
-		else
-			$output = $sc->get_link();
+		switch ( $sc->request )
+		{
+			case 'url' :
+			case 'src' :
+				$output = $sc->get_url();
+				break;
+
+			case 'link' :
+				$output = $sc->get_link();
+				break;
+
+			case 'img' :
+				$output = $sc->get_img();
+				break;
+
+			default:
+				/**
+				 * @filter 'pls/request/{request}'
+				 * @since 0.4.0
+				 * @param string output
+				 * @param object PostLinkShortcode
+				 */
+				$output = apply_filters( "pls/request/$sc->request", '', $sc );
+		}
 
 		/**
 		 * Final output
