@@ -15,9 +15,10 @@ class PostLinkShortcode
 	protected $archive;
 	protected $type;
 	protected $obj;
+	/* shortcode attributes reserved for output control */
+	protected $reserved_keys = [ 'post_id', 'slug', 'inner', 'text' ];
 	protected $_url;
 
-	protected $reserved_attributes = array( 'post_id', 'slug', 'text' );
 
 	function __construct( $atts, $content, $tag )
 	{
@@ -60,7 +61,7 @@ class PostLinkShortcode
 	 */
 	protected function setup_data( array $atts )
 	{
-		foreach ( $this->reserved_attributes as $key )
+		foreach ( $this->reserved_keys as $key )
 		{
 			if ( ! array_key_exists($key, $this->data) )
 				$this->data[ $key ] = null;
@@ -78,7 +79,7 @@ class PostLinkShortcode
 	protected function setup_attributes( array $attributes )
 	{
 		// remove reserved non-attributes
-		foreach ( $this->reserved_attributes as $key ) {
+		foreach ( $this->reserved_keys as $key ) {
 			unset( $attributes[ $key ] );
 		}
 
