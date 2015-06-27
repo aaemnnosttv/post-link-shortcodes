@@ -193,21 +193,7 @@ class PostLinkShortcode
 	 */
 	function get_link()
 	{
-		// get filtered & sanitized attrs
-		$attrs = $this->get_attrs();
-
-		// build html attribute string
-		$attr_pairs = array();
-		foreach ( $attrs as $name => $value )
-		{
-			$value = $this->do_att_shortcode( $value );
-
-			if ( is_numeric($name) && strlen($value) )
-				$attr_pairs[ ] = $value;
-			elseif ( ! is_numeric($name) && strlen($value) )
-				$attr_pairs[ ] = sprintf('%s="%s" ', $name, $value);
-		}
-		$html_attributes = trim( join(' ', $attr_pairs) );
+		$html_attributes = $this->format_html_attributes( $this->get_attrs() );
 
 		/**
 		 * Inner link text/html
@@ -352,6 +338,31 @@ class PostLinkShortcode
 			: null;
 	}
 
+	/**
+	 * @param array $attributes
+	 *
+	 * @return string
+	 */
+	protected function format_html_attributes( array $attributes )
+	{
+		// build html attribute string
+		$attr_pairs = array();
+		foreach ( $attributes as $name => $value )
+		{
+			$value = $this->do_att_shortcode( $value );
+
+			if ( is_numeric( $name ) && strlen( $value ) ) {
+				$attr_pairs[] = $value;
+			} elseif ( ! is_numeric( $name ) && strlen( $value ) ) {
+				$attr_pairs[] = sprintf( '%s="%s" ', $name, $value );
+			}
+		}
+		$html_attributes = trim( join( ' ', $attr_pairs ) );
+
+		return $html_attributes;
+	}
+
+}
 
 /**
  * Class PLS_SC
