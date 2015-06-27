@@ -178,7 +178,9 @@ class PostLinkShortcode
 		 * @param (mixed) the URL if found, or (bool) false on failure
 		 * @param (array) current shortcode object variables
 		 */
-		return $this->url = apply_filters( 'pls/url', $url, $this->get_filter_data() );
+		$url = apply_filters( 'pls/url', $this->url, $this->get_filter_data() );
+
+		return esc_url( $url );
 	}
 
 	function get_filter_data()
