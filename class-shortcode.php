@@ -283,7 +283,7 @@ class PostLinkShortcode
 		 * @param (string) markup
 		 * @param (array) current shortcode object variables
 		 */
-		return apply_filters( 'pls/link', "<a $html_attributes>$inner</a>", $this->get_filter_data() );
+		return apply_filters( 'pls/link', "<$this->element $html_attributes>$inner</$this->element>", $this->get_filter_data() );
 	}
 
 	public function get_img()
