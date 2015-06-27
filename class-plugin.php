@@ -25,7 +25,7 @@ class PostLinkShortcodes
 
 	public function setup_hooks()
 	{
-		add_action( 'wp_loaded'     , array($this, 'capture_types') );
+		add_action( 'wp_loaded'     , array($this, 'init') );
 		add_action( 'admin_notices' , array($this, 'report_conflicts') );
 
 		/**
@@ -40,14 +40,38 @@ class PostLinkShortcodes
 	}
 
 	/**
+	 * Kick the tires, 'n light the fires
+	 */
+	public function init()
+	{
+		$this->capture_types();
+		$this->register_shortcodes();
+
+		// Yes m'lord?
+		do_action( 'pls/ready' );
+	}
+
+	/**
 	 * Collect all post types
 	 */
 	public function capture_types()
 	{
-		$this->types = get_post_types( array('show_ui' => true), 'objects' );
+		$types = get_post_types( array('show_ui' => true), 'objects' );
+
+		/**
+		 * @filter 'pls/types'
+		 * @since 0.4.0
+		 * @param array $types  post type objects
+		 */
+		$this->types = apply_filters( 'pls/types', $types );
+	}
+
+	/**
+	 *
+	 */
+	public function register_shortcodes()
+	{
 		$this->register_dynamic_shortcodes();
-		// Yes m'lord?
-		do_action( 'pls/ready' );
 	}
 
 	/**
