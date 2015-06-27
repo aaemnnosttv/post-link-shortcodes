@@ -7,21 +7,46 @@
 
 class PostLinkShortcode
 {
+	/**
+	 * The shortcode tag
+	 * @var string
+	 */
 	protected $tag;
-	protected $url;
-	protected $data = array();
-	protected $attrs = array();
-	protected $request;
-	protected $archive;
-	protected $type;
+
+	/**
+	 * Related object
+	 * @var WP_Post|stdClass
+	 */
 	protected $obj;
+
+	/* @var string */
+	protected $request;
+
+	/* @var boolean */
+	protected $archive;
+
+	/* @var string post type */
+	protected $type;
 
 	/* html element name */
 	protected $element;
+
+	/* @var string */
+	protected $url;
+
+	/* @var array */
+	protected $data = [ ];
+
+	/* @var array */
+	protected $attrs = [ ];
+
 	/* html attribute which should receive the url */
 	protected $url_attribute;
+
 	/* shortcode attributes reserved for output control */
 	protected $reserved_keys = [ 'post_id', 'slug', 'inner', 'text' ];
+
+	/* @deprecated 0.4.0 */
 	protected $_url;
 
 
