@@ -5,7 +5,7 @@
  * @package  Post Link Shortcodes
  */
 
-class PLS_SC
+class PostLinkShortcode
 {
 	protected $tag;
 	protected $url;
@@ -352,4 +352,10 @@ class PLS_SC
 			: null;
 	}
 
-} // PLS_SC
+
+/**
+ * Class PLS_SC
+ * PostLinkShortcode alias
+ * @deprecated 0.4.0
+ */
+class PLS_SC extends PostLinkShortcode {}

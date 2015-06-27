@@ -117,7 +117,7 @@ class PostLinkShortcodes
 	 */
 	public function handler( $atts, $content, $tag )
 	{
-		$sc = new PLS_SC( $atts, $content, $tag );
+		$sc = new PostLinkShortcode( $atts, $content, $tag );
 
 		if ( ! $url = $sc->get_url() )
 		{
