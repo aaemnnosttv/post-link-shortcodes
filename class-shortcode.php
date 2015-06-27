@@ -37,8 +37,6 @@ class PostLinkShortcode
 		$this->setup_attributes( $atts );
 
 		$this->setup_shorthand( $atts );
-
-		$this->setup_inner( $content );
 	}
 
 	/**
@@ -110,22 +108,18 @@ class PostLinkShortcode
 
 	/**
 	 * Determines and sets what should be used for the element's inner content
-	 *
-	 * @param $content
-	 *
-	 * @return mixed
 	 */
-	protected function setup_inner( $content )
+	protected function setup_inner()
 	{
-		// If someone took the time to use an enclosed shortcode, that denotes precedence
-		// Allow alternate inner text to be set with a text="" att
-		// Defaults to post title for single, or post type name for archive
-		if ( '' !== $content )
-			$this->data['inner'] = $content;
+		// If someone took the time to use an enclosed shortcode, that takes precedence
+		if ( '' !== $this->data['orig']['content'] )
+			$this->data['inner'] = $this->data['orig']['content'];
 
+		// Allow inner text to be set with a text="" attribute instead
 		elseif ( ! empty( $this->data['orig']['atts']['text'] ) )
 			$this->data['inner'] = $this->do_att_shortcode( $this->data['orig']['atts']['text'] );
 
+		// Defaults to post title for single, or post type name for archive
 		else
 			$this->data['inner'] = '';
 	}
@@ -232,14 +226,16 @@ class PostLinkShortcode
 	}
 
 	/**
-	 * Determine inner html for the link
+	 * Determine inner html for the element
 	 */
 	function get_inner()
 	{
-		// static - [sc]$content[/sc] takes precedence over [sc text=""]
-		if ( ! empty( $this->data['inner'] ) )
-			return $this->data['inner'];
+		if ( ! isset( $this->data['inner'] ) )
+			$this->setup_inner();
 
+		// static - [sc]$content[/sc] takes precedence over [sc text=""]
+		if ( strlen( $this->data['inner'] ) )
+			return $this->data['inner'];
 
 		// dynamic
 		if ( $this->archive )
