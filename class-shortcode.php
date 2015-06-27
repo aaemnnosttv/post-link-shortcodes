@@ -131,44 +131,56 @@ class PostLinkShortcode
 	}
 
 	/**
+	 * Determines and sets the URL
+	 */
+	protected function setup_url()
+	{
+		if ( $this->archive ) {
+			return $this->url = get_post_type_archive_link( $this->type );
+		}
+
+		if ( ! $obj = $this->get_object() ) return;
+
+		return $this->url = ( $obj instanceof WP_Post ) ? get_permalink( $obj ) : false;
+	}
+
+	/**
+	 * @return object|null
+	 */
+	public function get_object()
+	{
+		if ( isset( $this->obj ) ) return $this->obj;
+
+		if ( $this->archive ) {
+			return $this->obj = get_post_type_object( $this->type );
+		}
+
+		if ( $this->data['post_id'] ) {
+			return $this->obj = get_post( $this->data['post_id'] );
+		}
+
+		if ( $this->data['slug'] )
+		{
+			$slug_query = array(
+				'name'           => $this->data[ 'slug' ],
+				'post_type'      => $this->type,
+				'posts_per_page' => 1
+			);
+
+			$slug_results = (array) get_posts( $slug_query );
+
+			return $this->obj = reset( $slug_results );
+		}
+
+		return null;
+	}
 	 * Get the target url
 	 * @return (string|bool) The permalink URL, or false on failure (if the target doesn't exist).
 	 */
 	function get_url()
 	{
-		if ( ! isset( $this->url ) )
-		{
-			if ( $this->archive )
-			{
-				$obj = get_post_type_object( $this->type );
-				$url = get_post_type_archive_link( $this->type );
-			}
-			else
-			{
-				// setup the object
-				if ( $this->data['post_id'] )
-				{
-					$obj = get_post( $this->data['post_id'] );
-				}
-				else
-				{
-					// search by post name "slug"
-					$slug_query = array(
-						'name'           => $this->data['slug'],
-						'post_type'      => $this->type,
-						'posts_per_page' => 1
-					);
-					// query
-					$slug_results = (array) get_posts( $slug_query );
-					
-					$obj = reset( $slug_results );
-				}
-
-				$url = is_object( $obj ) ? get_permalink( $obj ) : false;
-			}
-			// store results
-			$this->obj = $obj;
-			$this->_url = $url;
+		if ( ! isset( $this->url ) ) {
+			$this->setup_url();
 		}
 
 		/**
