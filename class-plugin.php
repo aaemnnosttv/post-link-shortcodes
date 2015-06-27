@@ -11,14 +11,24 @@ class PostLinkShortcodes
 	/* @deprecated 0.4.0 */
 	protected static $instance;
 
-	/* Captured post types */
-	protected $types;
+	/**
+	 * Captured post types
+	 * @var array
+	 */
+	protected $types = array();
 
+	/**
+	 * @var array
+	 */
 	protected $shortcodes = array(
 		'all'        => array(),
 		'registered' => array(),
 	);
 
+	/**
+	 * Registered shortcode aliases
+	 * @var array
+	 */
 	protected $aliases = array();
 
 	public function __construct() {}
