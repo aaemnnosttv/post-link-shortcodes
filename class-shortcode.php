@@ -17,7 +17,7 @@ class PostLinkShortcode
 	protected $obj;
 	protected $_url;
 
-	protected $reserved_attributes = array( 0, 'post_id', 'slug', 'text' );
+	protected $reserved_attributes = array( 'post_id', 'slug', 'text' );
 
 	function __construct( $atts, $content, $tag )
 	{
