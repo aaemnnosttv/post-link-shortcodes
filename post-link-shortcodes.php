@@ -39,6 +39,54 @@ else:
 	add_action('admin_notices', '_pls_insufficient_php_version_notice');
 endif;
 
+
+/**
+ * Initializes the plugin and stores the global instance
+ * @return PostLinkShortcodes
+ */
+function PostLinkShortcodes()
+{
+	static $plugin;
+	if ( ! $plugin ) {
+		$plugin = new PostLinkShortcodes();
+		$plugin->setup_hooks();
+	}
+
+	return $plugin;
+}
+
+/**
+ * Register a NEW shortcode as an alias of a PLS shortcode
+ *
+ * Optionally define default values for attributes &/or prefix/suffix them
+ * to the attributes passed by the shortcode!
+ *
+ * Note: function arguments differ from add_shortcode! (with the exception of the first)
+ *
+ * @param  string	$tag 		name of shortcode to add
+ * @param  string	$alias_of	tag of shortcode to "connect" to
+ * @param  mixed 	$defaults 	array of default attributes => values
+ *
+ * Prefix / Suffix
+ * these are always applied as they are additive
+ *
+ * Prefix a value:
+ * +class => 'someclass ' with a shortcode that passes class="myclass"
+ * will produce an html class attribute class="someclass myclass"
+ *
+ * Suffix a value:
+ * class+ => ' someclass' with a shortcode that passes class="myclass"
+ * will produce an html class attribute class="myclass someclass"
+ *
+ * Defaults (no prefix/suffix):
+ * defined values that are added if there is no existing value for the attribute
+ * passed shortcode values will override defined defaults completely
+ */
+function pls_add_shortcode_alias( $tag, $alias_of, $defaults = false )
+{
+	PostLinkShortcodes()->alias( $tag, $alias_of, $defaults );
+}
+
 /**
  * A notice to display in the admin if the installed version of PHP is too old
  */
