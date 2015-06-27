@@ -312,14 +312,11 @@ class PostLinkShortcode
 
 	/**
 	 * Get sanitized, qualified attributes
-	 *
 	 * @return array
 	 */
 	function get_attrs()
 	{
-		// base attributes
-		// a shortcode-defined href is overridden by the url
-		$attrs = array_merge( $this->attrs, array('href' => $this->url) );
+		$attrs = $this->attrs;
 
 		/**
 		 * Optionally restrict html attributes to only those defined here
@@ -329,14 +326,27 @@ class PostLinkShortcode
 		 * To use: return a 1 dimensional array of allowed html attributes
 		 * Ex: return array('href','id','class')
 		 *
-		 * @filter 'pls/allowed_link_attributes'
+		 * @filter 'pls/{request}/attributes/allowed'
 		 * @param (array)	array()	empty array to be filled with html attribute names to whitelist
 		 * @param (array)	$attrs	current set of html attribute => value
 		 * @param (array)	array() current shortcode object variables
-		 *
-		 * *** MAKE SURE TO INCLUDE 'href' IF YOU USE THIS! ***
 		 */
-		$allowed = apply_filters( 'pls/allowed_link_attributes', array(), $attrs, $this->get_filter_data() );
+		$allowed = [ ];
+
+		if ( 'link' == $this->request ) {
+			/**
+			 * @filter 'pls/allowed_link_attributes'
+			 * @deprecated 0.4.0
+			 */
+			if ( has_filter('pls/allowed_link_attributes') )
+			{
+				_deprecated_argument('add_filter', '0.4.0',
+					"The filter tag 'pls/allowed_link_attributes' is deprecated.'
+					Use 'pls/link/attributes/allowed' instead."
+				);
+			}
+			$allowed = apply_filters( 'pls/allowed_link_attributes', $allowed, $attrs, $this->get_filter_data() );
+		}
 		$allowed = apply_filters( "pls/$this->request/attributes/allowed", $allowed, $attrs, $this->get_filter_data() );
 
 		if ( $allowed && is_array( $allowed ) )
@@ -354,21 +364,39 @@ class PostLinkShortcode
 		 * To use: return a 1 dimensional array of html attributes to exclude
 		 * Ex: return array('style','height','width')
 		 *
-		 * @filter 'pls/exclude_link_attributes'
+		 * @filter 'pls/{request}/attributes/disallowed'
 		 * @param (array)	array()	empty array to be filled with html attribute names to blacklist
 		 * @param (array)	$attrs	current set of html attribute => value
 		 * @param (array)	array() current shortcode object variables
 		 *
-		 * May be used together with 'pls/allowed_link_attributes' filter as well
+		 * May be used together with 'pls/{request}/attributes/allowed' filter as well
 		 */
-		$exclude = apply_filters( 'pls/exclude_link_attributes', array(), $attrs, $this->get_filter_data() );
-		$exclude = apply_filters( "pls/$this->request/attributes/disallowed", $exclude, $attrs, $this->get_filter_data() );
+		$disallowed = $this->reserved_keys;
 
-		if ( $exclude && is_array( $exclude ) )
+		if ( 'link' == $this->request ) {
+			/**
+			 * @filter 'pls/exclude_link_attributes'
+			 * @deprecated 0.4.0
+			 */
+			if ( has_filter('pls/exclude_link_attributes') )
+			{
+				_deprecated_argument('add_filter', '0.4.0',
+					"The filter tag 'pls/exclude_link_attributes' is deprecated.'
+					Use 'pls/link/attributes/disallowed' instead."
+				);
+			}
+			$disallowed = apply_filters( 'pls/allowed_link_attributes', $disallowed, $attrs, $this->get_filter_data() );
+		}
+		$disallowed = apply_filters( "pls/$this->request/attributes/disallowed", $disallowed, $attrs, $this->get_filter_data() );
+
+		if ( $disallowed && is_array( $disallowed ) )
 		{
-			foreach ( $exclude as $e )
+			foreach ( $disallowed as $e )
 				unset( $attrs[ $e ] );
 		}
+
+		unset( $attrs[ $this->url_attribute ] );
+		$attrs = array_merge( array($this->url_attribute => $this->get_url()), $attrs );
 
 		// sanitize attribute values
 		return array_map( 'esc_attr', $attrs );
