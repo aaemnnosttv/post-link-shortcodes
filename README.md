@@ -51,6 +51,8 @@ Depending on what kind of returned information is desired, the right shortcode w
 `[post_url hello-world]` or `[post_url 1]`
 `[page_url sample-page]` or `[page_url 2]`
 
+If used, shorthand values must be the first _keyless_ shortcode attribute if any others are used.
+
 ### Archive ###
 
 *By default, built-in WordPress post types do not have archive pages, therefore this feature is geared more for custom post types.
@@ -59,31 +61,59 @@ For this example, I will reference a hypothetical custom post type 'book' which 
 `[book_archive_url]`
 That's it!
 
+= HTML Elements = 
+Prior to v0.4.0, Post Link Shortcodes were limited to creating HTML anchors - "links" - to their target resource.
+
+With 0.4.0, that support has been extended to images as well.
+
+### HTML Element Attributes ###
+
+Post Link Shortcodes aims to provide maximum flexibility when it comes to adding attributes to the html element you are generating.  You can essentially use whatever you want.
+
+The html attributes mirror the attributes used by the shortcode, with the exception of the reserved control attributes: `post_id`, `slug`, `inner`, `text`, and - where applicable - `size`.
+
+To reiterate, any other attribute="value" added to the shortcode, will be added to the html element.  It really couldn't be easier!
+
+( *Allowed attributes can be restricted using filters* )
+
+### Images ###
+
+Images can be rendered in two ways, either by using the `attachment_img` shortcode or by the dynamic `{type}_img` shortcode, which is added for all registered post types which support `thumbnail` (featured images).
+
+
 ### Link / Anchor ###
 
-The link shortcodes are fully controlable. The attributes are the same as the URL shortcodes for establishing the target (href).
+The link shortcodes are fully controlable. 
 
 **Link Text**
 
-Link text (anchor inner html) is set by either:
+Link text (inner html) is set by either:
 
 **Dynamic**
 
 * `[{type}_link]` defaults to target post title
 * `[{type}_archive_link]` defaults to {type} name
 
-**Static**
-
-* `[{type}_link]this is link text[/{type}_link]` OR
-* `[{type}_link text="this is link text"]` OR
+**Static** (in order of dominance)
+* `[{type}_link]this is link text[/{type}_link]`
 * `[{type}_link inner="this is link text"]`
+* `[{type}_link text="this is link text"]`
 
 Link text supports shortcodes.
 
-**The rest of the attributes are created by YOU!
-Any other attribute="value" you use, will be added to the html element.**
+## Linking to an SRC ##
 
-( *Allowed attributes can be restricted using filters* )
+Post Link Shortcodes refers to an `src` as the URL to an image, or attachment of any other type.
+By default, a `{type}_link` shortcode will use the target's permalink as the URL.  For targets with a featured image, or attachments where you want to create a link to the target's src, simply use the `href=src` attribute pair.  That's it!
+
+E.g. `[attachment_link 5234 href=src text="Download the PDF manual" class="pdf" download]`
+
+This would generate an html anchor with the href pointing to the file URL for the attachment with ID 5234, which might look something like this:
+`<a href="http://example.com/wp-content/uploads/2015/06/user-manual.pdf" class="pdf" download>Download the PDF manual</a>`
+
+Note the keyless/boolean `download` attribute.  This is an HTML5 attribute which modern browsers understand that the target url is to be downloaded, rather than navigated to.  Try it!  Great for file downloads like the above example.
+
+
 
 **Example:** `[{type}_link id=mylink class="blue special" target=_blank]`
 will produce: `<a href="url-to-post" id="mylink" class="blue special" target="_blank">Post Title</a>`
