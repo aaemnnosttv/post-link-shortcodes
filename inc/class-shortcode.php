@@ -110,6 +110,9 @@ class PostLinkShortcode
 				$this->url_attribute = 'src';
 				array_push($this->reserved_keys, 'size');
 				break;
+			case 'src' :
+				array_push($this->reserved_keys, 'size');
+				break;
 		}
 
 		if ( $this->url_attribute )
