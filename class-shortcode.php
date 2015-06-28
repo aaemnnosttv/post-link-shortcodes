@@ -34,6 +34,12 @@ class PostLinkShortcode
 	/* @var string */
 	protected $url;
 
+	/* enclosed shortcode content */
+	protected $content;
+
+	/* element inner content */
+	protected $inner;
+
 	/* @var array */
 	protected $data = [ ];
 
@@ -60,6 +66,8 @@ class PostLinkShortcode
 			'content' => $content,
 			'tag'     => $tag,
 		);
+
+		$this->content = $content;
 
 		$this->setup_props( $tag );
 
@@ -166,16 +174,38 @@ class PostLinkShortcode
 	protected function setup_inner()
 	{
 		// If someone took the time to use an enclosed shortcode, that takes precedence
-		if ( '' !== $this->data['orig']['content'] )
-			$this->data['inner'] = $this->data['orig']['content'];
+		if ( strlen( $this->content ) )
+			return $this->inner = $this->content;
 
-		// Allow inner text to be set with a text="" attribute instead
-		elseif ( ! empty( $this->data['orig']['atts']['text'] ) )
-			$this->data['inner'] = $this->do_att_shortcode( $this->data['orig']['atts']['text'] );
+		// Allow inner content to be set with an inner="" attribute
+		if ( strlen( $this->data['inner'] ) )
+			return $this->inner = $this->do_att_shortcode( $this->data['inner'] );
 
-		// Defaults to post title for single, or post type name for archive
-		else
-			$this->data['inner'] = '';
+		// Allow inner text to be set with a text="" attribute
+		if ( strlen( $this->data['text'] ) )
+			return $this->inner = $this->do_att_shortcode( $this->data['text'] );
+
+		// dynamic
+		if ( $this->archive )
+		{
+			/**
+			 * Archive link text
+			 * @filter 'pls/archive_text'
+			 * @param (string) post type name
+			 * @param (object) post type object
+			 * @param (array) current shortcode object variables
+			 */
+			return $this->inner = apply_filters( 'pls/archive_text', $this->obj->labels->name, $this->obj, $this->get_filter_data() );
+		}
+
+		/**
+		 * Single post link text
+		 * @filter 'pls/single_text'
+		 * @param (string) post title
+		 * @param (object) post object
+		 * @param (array) current shortcode object variables
+		 */
+		return $this->inner = apply_filters( 'pls/single_text', $this->obj->post_title, $this->obj, $this->get_filter_data() );
 	}
 
 	/**
@@ -309,36 +339,18 @@ class PostLinkShortcode
 	/**
 	 * Determine inner html for the element
 	 */
-	function get_inner()
+	public function get_inner()
 	{
-		if ( ! isset( $this->data['inner'] ) )
+		if ( ! isset( $this->inner ) ) {
 			$this->setup_inner();
-
-		// static - [sc]$content[/sc] takes precedence over [sc text=""]
-		if ( strlen( $this->data['inner'] ) )
-			return $this->data['inner'];
-
-		// dynamic
-		if ( $this->archive )
-		{
-			/**
-			 * Archive link text
-			 * @filter 'pls/archive_text'
-			 * @param (string) post type name
-			 * @param (object) post type object
-			 * @param (array) current shortcode object variables
-			 */
-			return apply_filters( 'pls/archive_text', $this->obj->labels->name, $this->obj, $this->get_filter_data() );
 		}
 
 		/**
-		 * Single post link text
-		 * @filter 'pls/single_text'
-		 * @param (string) post title
-		 * @param (object) post object
-		 * @param (array) current shortcode object variables
+		 * @filter 'pls/inner'
+		 * @param inner html element content
+		 * @param shortcode data
 		 */
-		return apply_filters( 'pls/single_text', $this->obj->post_title, $this->obj, $this->get_filter_data() );
+		return apply_filters( 'pls/inner', $this->inner, $this->get_filter_data() );
 	}
 
 	/**
