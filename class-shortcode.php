@@ -108,6 +108,7 @@ class PostLinkShortcode
 			case 'img' :
 				$this->element = 'img';
 				$this->url_attribute = 'src';
+				array_push($this->reserved_keys, 'size');
 				break;
 		}
 
@@ -234,6 +235,13 @@ class PostLinkShortcode
 		$object = $this->get_object();
 
 		if ( ! get_attached_file( $object->ID ) ) return;
+
+		if ( wp_attachment_is_image( $object->ID ) )
+		{
+			$size = ! empty( $this->data['size'] ) ? $this->data['size'] : 'full';
+			$attachment = (array) wp_get_attachment_image_src( $object->ID, $size );
+			return reset( $attachment );
+		}
 
 		return wp_get_attachment_url( $object->ID );
 	}
