@@ -219,14 +219,23 @@ class PostLinkShortcode
 
 		if ( ! $obj = $this->get_object() ) return;
 
-		if (
-			('attachment' == $this->type && in_array($this->request, array('src','img')))
-			|| ('attachment' == $this->type && 'link' == $this->request && 'src' == $this->data['href'] )
-		) {
-			return $this->url = wp_get_attachment_url( $obj->ID );
+		if ( $this->url_is_src() ) {
+			return $this->url = $this->get_attachment_src();
 		}
 
 		return $this->url = ( $obj instanceof WP_Post ) ? get_permalink( $obj ) : false;
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	protected function get_attachment_src()
+	{
+		$object = $this->get_object();
+
+		if ( ! get_attached_file( $object->ID ) ) return;
+
+		return wp_get_attachment_url( $object->ID );
 	}
 
 	/**
@@ -491,6 +500,20 @@ class PostLinkShortcode
 		$html_attributes = trim( join( ' ', $attr_pairs ) );
 
 		return $html_attributes;
+	}
+
+	/**
+	 * Whether or not the url should return an src, rather than permalink
+	 * @return bool
+	 */
+	protected function url_is_src()
+	{
+		if ( in_array( $this->request, ['src','img'] ) ) return true;
+
+		// href=src syntax
+		if ( ! empty( $this->data['href'] ) && 'src' == $this->data['href'] ) return true;
+
+		return false;
 	}
 
 }
