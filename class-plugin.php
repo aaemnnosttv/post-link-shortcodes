@@ -33,6 +33,9 @@ class PostLinkShortcodes
 
 	public function __construct() {}
 
+	/**
+	 * Register core actions & filters
+	 */
 	public function setup_hooks()
 	{
 		add_action( 'wp_loaded'     , array($this, 'init') );

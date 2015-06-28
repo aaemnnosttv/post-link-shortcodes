@@ -387,9 +387,9 @@ class PostLinkShortcode
 		 * Ex: return array('href','id','class')
 		 *
 		 * @filter 'pls/{request}/attributes/allowed'
-		 * @param (array)	array()	empty array to be filled with html attribute names to whitelist
-		 * @param (array)	$attrs	current set of html attribute => value
-		 * @param (array)	array() current shortcode object variables
+		 * @param array array()	empty array to be filled with html attribute names to whitelist
+		 * @param array $attrs	current set of html attribute => value
+		 * @param array array() current shortcode object variables
 		 */
 		$allowed = [ ];
 
