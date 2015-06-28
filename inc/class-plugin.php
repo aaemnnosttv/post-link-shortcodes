@@ -118,12 +118,13 @@ class PostLinkShortcodes
 	 */
 	protected function register_shortcodes_for_type( $type )
 	{
-		foreach ( array( 'url', 'link' ) as $request )
-		{
+		foreach ( array( 'url', 'link' ) as $request ) {
 			$this->register_shortcode( "{$type->name}_$request" );
+		}
 
-			if ( $type->has_archive )
-				$this->register_shortcode( "{$type->name}_archive_$request" );
+		if ( $type->has_archive ) {
+			$this->register_shortcode( "{$type->name}_archive_$request" );
+		}
 		}
 	}
 
