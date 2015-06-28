@@ -29,8 +29,8 @@
 
 // We require PHP 5.4 or above
 if ( version_compare( phpversion(), '5.4', '>=' ) ) :
-	require_once( 'class-plugin.php' );
-	require_once( 'class-shortcode.php' );
+	require_once( __DIR__ . '/inc/class-plugin.php' );
+	require_once( __DIR__ . '/inc/class-shortcode.php' );
 	/**
 	 * Initialize plugin!
 	 */
