@@ -234,6 +234,10 @@ class PostLinkShortcode
 	{
 		$object = $this->get_object();
 
+		if ( has_post_thumbnail( $object->ID ) ) {
+			$object = get_post( get_post_thumbnail_id( $object->ID ) );
+		}
+
 		if ( ! get_attached_file( $object->ID ) ) return;
 
 		if ( wp_attachment_is_image( $object->ID ) )

@@ -125,6 +125,11 @@ class PostLinkShortcodes
 		if ( $type->has_archive ) {
 			$this->register_shortcode( "{$type->name}_archive_$request" );
 		}
+
+		if ( post_type_supports( $type->name, 'thumbnail' ) )
+		{
+			$this->register_shortcode( "{$type->name}_src" );
+			$this->register_shortcode( "{$type->name}_img" );
 		}
 	}
 
