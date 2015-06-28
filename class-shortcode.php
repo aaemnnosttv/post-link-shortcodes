@@ -56,7 +56,7 @@ class PostLinkShortcode
 	protected $_url;
 
 
-	function __construct( $atts, $content, $tag )
+	public function __construct( $atts, $content, $tag )
 	{
 		if ( ! is_array( $atts ) )
 			$atts = array();
