@@ -162,7 +162,13 @@ class PostLinkShortcode
 	 */
 	protected function setup_shorthand( $atts )
 	{
-		if ( ! $this->archive && isset( $atts[ 0 ] ) )
+		if ( $this->archive ) return; // archives only require {type}
+
+		// the data has been passed explicitly - bail!
+		if ( $this->data['post_id'] || $this->data['slug'] ) return;
+
+		// shorthand value must be the first keyless shortcode attribute
+		if ( isset( $atts[ 0 ] ) )
 		{
 			$value              = $this->do_att_shortcode( $atts[ 0 ] );
 			$key                = is_numeric( $value ) ? 'post_id' : 'slug';
