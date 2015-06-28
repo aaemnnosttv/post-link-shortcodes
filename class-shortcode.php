@@ -73,9 +73,9 @@ class PostLinkShortcode
 
 		$this->setup_element();
 
-		$this->setup_data( $atts );
-
 		$this->setup_attributes( $atts );
+
+		$this->setup_data( $atts );
 
 		$this->setup_shorthand( $atts );
 	}
