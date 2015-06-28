@@ -262,10 +262,8 @@ class PostLinkShortcode
 	/**
 	 * @return object|null
 	 */
-	public function get_object()
+	protected function setup_object()
 	{
-		if ( isset( $this->obj ) ) return $this->obj;
-
 		if ( $this->archive ) {
 			return $this->obj = get_post_type_object( $this->type );
 		}
@@ -288,6 +286,23 @@ class PostLinkShortcode
 		}
 
 		return null;
+	}
+
+	/**
+	 * Get the shortcode's target object
+	 */
+	public function get_object()
+	{
+		if ( ! isset( $this->obj ) ) {
+			$this->setup_object();
+		}
+
+		/**
+		 * @filter 'pls/object'
+		 * @param WP_Post|stdClass
+		 * @param array current shortcode object variables
+		 */
+		return apply_filters( 'pls/object', $this->obj, $this->get_filter_data() );
 	}
 
 	/**
