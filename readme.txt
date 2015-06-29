@@ -144,11 +144,14 @@ The sky is the limit!
 
 PLS has several filters to control the output.
 
-* `pls/url` - a returned value of (bool) `false` will kill further output/processing - equivalent to no target found.
+* `pls/object` - the target object
+* `pls/url` - the target url/src
 * `pls/single_text` - inner text for anchor for a single post
 * `pls/archive_text` - inner text for anchor for a post archive page
 * `pls/link_text` - inner text for anchor
+* `pls/inner` - html element's inner html
 * `pls/link` - link markup
+* `pls/img` - image markup
 * `pls/output` - final returned output
 * `pls/output/not_found` - markup to return in the event the target is not found. Default: `''` (empty string)
 
@@ -158,9 +161,9 @@ Each filter callback accepts at least 2 parameters, some 3.  See the source for 
 
 By default, all html attributes are allowed in link shortcodes.  If you wish to restrict those that can be used, there are 2 filters for doing so.
 
-* `pls/allowed_link_attributes` - indexed array of all allowed attribute names.  All others are stripped out.  I would recommend including 'href' here if you use this filter as it is not protected.
+* `pls/{request}/attributes/allowed` - indexed array of all allowed attribute names.  All others are stripped out.  I would recommend including 'href' here if you use this filter as it is not protected.
 
-* `pls/exclude_link_attributes` - indexed array of attribute names NOT to allow.
+* `pls/{request}/attributes/disallowed` - indexed array of attribute names NOT to allow.
 
 The two filters may be used together.
 
