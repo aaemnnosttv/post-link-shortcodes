@@ -14,7 +14,7 @@ class PostLinkShortcode
 	protected $tag;
 
 	/**
-	 * Related object
+	 * Target object
 	 * @var WP_Post|stdClass
 	 */
 	protected $obj;
@@ -179,6 +179,35 @@ class PostLinkShortcode
 	}
 
 	/**
+	 * @return object|null
+	 */
+	protected function setup_object()
+	{
+		if ( $this->archive ) {
+			return $this->obj = get_post_type_object( $this->type );
+		}
+
+		if ( $this->data['post_id'] ) {
+			return $this->obj = get_post( $this->data['post_id'] );
+		}
+
+		if ( $this->data['slug'] )
+		{
+			$slug_query = array(
+				'name'           => $this->data[ 'slug' ],
+				'post_type'      => $this->type,
+				'posts_per_page' => 1
+			);
+
+			$slug_results = (array) get_posts( $slug_query );
+
+			return $this->obj = reset( $slug_results );
+		}
+
+		return null;
+	}
+
+	/**
 	 * Determines and sets what should be used for the element's inner content
 	 */
 	protected function setup_inner()
@@ -237,58 +266,6 @@ class PostLinkShortcode
 	}
 
 	/**
-	 * @return bool|string
-	 */
-	protected function get_attachment_src()
-	{
-		$object = $this->get_object();
-
-		if ( has_post_thumbnail( $object->ID ) ) {
-			$object = get_post( get_post_thumbnail_id( $object->ID ) );
-		}
-
-		if ( ! get_attached_file( $object->ID ) ) return;
-
-		if ( wp_attachment_is_image( $object->ID ) )
-		{
-			$size = ! empty( $this->data['size'] ) ? $this->data['size'] : 'full';
-			$attachment = (array) wp_get_attachment_image_src( $object->ID, $size );
-			return reset( $attachment );
-		}
-
-		return wp_get_attachment_url( $object->ID );
-	}
-
-	/**
-	 * @return object|null
-	 */
-	protected function setup_object()
-	{
-		if ( $this->archive ) {
-			return $this->obj = get_post_type_object( $this->type );
-		}
-
-		if ( $this->data['post_id'] ) {
-			return $this->obj = get_post( $this->data['post_id'] );
-		}
-
-		if ( $this->data['slug'] )
-		{
-			$slug_query = array(
-				'name'           => $this->data[ 'slug' ],
-				'post_type'      => $this->type,
-				'posts_per_page' => 1
-			);
-
-			$slug_results = (array) get_posts( $slug_query );
-
-			return $this->obj = reset( $slug_results );
-		}
-
-		return null;
-	}
-
-	/**
 	 * Get the shortcode's target object
 	 */
 	public function get_object()
@@ -309,7 +286,7 @@ class PostLinkShortcode
 	 * Get the target url
 	 * @return bool (string|bool) The permalink URL, or false on failure (if the target doesn't exist).
 	 */
-	function get_url()
+	public function get_url()
 	{
 		if ( ! isset( $this->url ) ) {
 			$this->setup_url();
@@ -328,20 +305,34 @@ class PostLinkShortcode
 	}
 
 	/**
-	 * Get current data relevant for filter callbacks
-	 * @return array
+	 * @return bool|string
 	 */
-	function get_filter_data()
+	public function get_attachment_src()
 	{
-		return get_object_vars( $this );
+		$object = $this->get_object();
+
+		if ( has_post_thumbnail( $object->ID ) ) {
+			$object = get_post( get_post_thumbnail_id( $object->ID ) );
+		}
+
+		if ( ! get_attached_file( $object->ID ) ) return;
+
+		if ( wp_attachment_is_image( $object->ID ) )
+		{
+			$size = ! empty( $this->data['size'] ) ? $this->data['size'] : 'full';
+			$attachment = (array) wp_get_attachment_image_src( $object->ID, $size );
+			return reset( $attachment );
+		}
+
+		return wp_get_attachment_url( $object->ID );
 	}
 
 	/**
 	 * Get Link (anchor) markup
 	 * By this point, a URL has successfully been found
-	 * @return (string)
+	 * @return mixed|void (string)
 	 */
-	function get_link()
+	public function get_link()
 	{
 		$html_attributes = $this->format_html_attributes( $this->get_attrs() );
 
@@ -367,6 +358,9 @@ class PostLinkShortcode
 		return apply_filters( 'pls/link', "<$this->element $html_attributes>$inner</$this->element>", $this->get_filter_data() );
 	}
 
+	/**
+	 * @return mixed|void
+	 */
 	public function get_img()
 	{
 		$html_attributes = $this->format_html_attributes( $this->get_attrs() );
@@ -402,7 +396,7 @@ class PostLinkShortcode
 	 * Get sanitized, qualified attributes
 	 * @return array
 	 */
-	function get_attrs()
+	public function get_attrs()
 	{
 		$attrs = $this->attrs;
 
@@ -491,13 +485,22 @@ class PostLinkShortcode
 	}
 
 	/**
+	 * Get current data relevant for filter callbacks
+	 * @return array
+	 */
+	public function get_filter_data()
+	{
+		return get_object_vars( $this );
+	}
+
+	/**
 	 * Allow shortcodes to be used inside shortcode attribute values by using {{}} instead of []
 	 *
 	 * @param $content
 	 *
 	 * @return string
 	 */
-	function do_att_shortcode( $content )
+	public function do_att_shortcode( $content )
 	{
 		if ( false !== strpos($content, '{{') && false !== strpos($content, '}}') )
 		{
@@ -507,7 +510,14 @@ class PostLinkShortcode
 		return $content;
 	}
 
-	function __get( $name )
+	/**
+	 * Provide read-only access to protected properties
+	 *
+	 * @param $name
+	 *
+	 * @return null
+	 */
+	public function __get( $name )
 	{
 		return property_exists($this, $name)
 			? $this->{$name}
