@@ -59,13 +59,13 @@ class PostLinkShortcode
 	public function __construct( $atts, $content, $tag )
 	{
 		if ( ! is_array( $atts ) )
-			$atts = array();
+			$atts = [ ];
 
-		$this->data['orig'] = array(
+		$this->data['orig'] = [
 			'atts'    => $atts,
 			'content' => $content,
 			'tag'     => $tag,
-		);
+		];
 
 		$this->content = $content;
 
@@ -484,7 +484,7 @@ class PostLinkShortcode
 		}
 
 		unset( $attrs[ $this->url_attribute ] );
-		$attrs = array_merge( array($this->url_attribute => $this->get_url()), $attrs );
+		$attrs = array_merge( [ $this->url_attribute => $this->get_url() ], $attrs );
 
 		// sanitize attribute values
 		return array_map( 'esc_attr', $attrs );
@@ -522,15 +522,15 @@ class PostLinkShortcode
 	protected function format_html_attributes( array $attributes )
 	{
 		// build html attribute string
-		$attr_pairs = array();
+		$attr_pairs = [ ];
 		foreach ( $attributes as $name => $value )
 		{
 			$value = $this->do_att_shortcode( $value );
 
 			if ( is_numeric( $name ) && strlen( $value ) ) {
-				$attr_pairs[] = $value;
+				$attr_pairs[ ] = $value;
 			} elseif ( ! is_numeric( $name ) && strlen( $value ) ) {
-				$attr_pairs[] = sprintf( '%s="%s" ', $name, $value );
+				$attr_pairs[ ] = sprintf( '%s="%s" ', $name, $value );
 			}
 		}
 		$html_attributes = trim( join( ' ', $attr_pairs ) );
