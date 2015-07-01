@@ -290,6 +290,13 @@ class PostLinkShortcodes
 		add_shortcode( $tag, array($this, 'alias_handler') );
 	}
 
+	/**
+	 * Check the key for the presence of a modifier flag
+	 *
+	 * @param $a
+	 *
+	 * @return bool|string
+	 */
 	function get_flag( $a )
 	{
 		$len = strlen( $a );
