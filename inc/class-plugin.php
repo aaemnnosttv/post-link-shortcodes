@@ -228,15 +228,13 @@ class PostLinkShortcodes
 	 */
 	function alias_handler( $atts, $content, $tag )
 	{
-		if ( ! isset( $this->aliases[ $tag ] ) )
-			return;
+		if ( ! isset( $this->aliases[ $tag ] ) ) return;
 
 		$alias_of = $this->aliases[ $tag ]['alias_of'];
 		$defaults = $this->aliases[ $tag ]['defaults'];
 
 		// make sure the alias target exists
-		if ( ! in_array( $alias_of, $this->shortcodes['all'] ) )
-			return;
+		if ( ! in_array( $alias_of, $this->shortcodes['all'] ) ) return;
 
 		// will be '' if no atts in sc string
 		if ( ! is_array( $atts ) )
@@ -297,8 +295,7 @@ class PostLinkShortcodes
 		$len = strlen( $a );
 
 		// check for a difference on either side
-		if ( strlen( trim( $a, '+' ) ) === $len )
-			return false;
+		if ( strlen( trim( $a, '+' ) ) === $len ) return false;
 
 		if ( strlen( ltrim( $a, '+' ) ) !== $len )
 			return 'prefix';
