@@ -344,9 +344,17 @@ class PostLinkShortcode
 		 * @see  PostLinkShortcode::setup_hooks
 		 *
 		 * @filter 'pls/link_text'
+		 * @deprecated 0.4.0
 		 * @param (string)	inner 	current inner html of link
 		 * @param (array)	array() current shortcode object variables
 		 */
+		if ( has_filter('pls/link_text') )
+		{
+			_deprecated_argument('add_filter', '0.4.0',
+				"The filter tag 'pls/link_text' is deprecated.'
+				Use 'pls/inner' instead."
+			);
+		}
 		$inner = apply_filters( 'pls/link_text', $this->get_inner(), $this->get_filter_data() );
 
 		/**
