@@ -115,8 +115,9 @@ class PostLinkShortcode
 				break;
 		}
 
-		if ( $this->url_attribute )
-			array_push($this->reserved_keys, $this->url_attribute);
+		if ( $this->url_attribute ) {
+			array_push( $this->reserved_keys, $this->url_attribute );
+		}
 	}
 
 	/**
