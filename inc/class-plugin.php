@@ -307,7 +307,7 @@ class PostLinkShortcodes
 	 * Provides feedback about shortcodes which couldn't be registered
 	 * without overriding existing ones.
 	 */
-	protected function report_conflicts()
+	public function report_conflicts()
 	{
 		if ( count( $this->conflicts ) ) {
 			do_action( 'pls/conflicts', $this->conflicts );
