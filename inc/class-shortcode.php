@@ -231,10 +231,19 @@ class PostLinkShortcode
 			/**
 			 * Archive link text
 			 * @filter 'pls/archive_text'
+			 * @deprecated 0.4.0
+			 *
 			 * @param (string) post type name
 			 * @param (object) post type object
 			 * @param (array) current shortcode object variables
 			 */
+			if ( has_filter('pls/archive_text') )
+			{
+				_deprecated_argument('add_filter', '0.4.0',
+					"The filter tag 'pls/archive_text' is deprecated.'
+					Use 'pls/inner' instead."
+				);
+			}
 			return $this->inner = apply_filters( 'pls/archive_text', $this->obj->labels->name, $this->obj, $this->get_filter_data() );
 		}
 
