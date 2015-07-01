@@ -241,10 +241,19 @@ class PostLinkShortcode
 		/**
 		 * Single post link text
 		 * @filter 'pls/single_text'
+		 * @deprecated 0.4.0
+		 *
 		 * @param (string) post title
 		 * @param (object) post object
 		 * @param (array) current shortcode object variables
 		 */
+		if ( has_filter('pls/single_text') )
+		{
+			_deprecated_argument('add_filter', '0.4.0',
+				"The filter tag 'pls/single_text' is deprecated.'
+				Use 'pls/inner' instead."
+			);
+		}
 		return $this->inner = apply_filters( 'pls/single_text', $this->obj->post_title, $this->obj, $this->get_filter_data() );
 	}
 
