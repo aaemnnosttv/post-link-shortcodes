@@ -27,17 +27,12 @@
 */
 
 
-// We require PHP 5.4 or above
-if ( version_compare( phpversion(), '5.4', '>=' ) ) :
-	require_once( __DIR__ . '/inc/class-plugin.php' );
-	require_once( __DIR__ . '/inc/class-shortcode.php' );
-	/**
-	 * Initialize plugin!
-	 */
-	PostLinkShortcodes();
-else:
-	add_action('admin_notices', '_pls_insufficient_php_version_notice');
-endif;
+require_once( dirname(__FILE__) . '/inc/class-plugin.php' );
+require_once( dirname(__FILE__) . '/inc/class-shortcode.php' );
+/**
+ * Initialize plugin!
+ */
+PostLinkShortcodes();
 
 
 /**
@@ -95,7 +90,7 @@ function _pls_insufficient_php_version_notice()
 	if ( ! current_user_can('activate_plugins') ) return;
 	?>
 <div id="message" class="error">
-	<p><strong>As of version 0.4.0, <em>Post Link Shortcodes</em> requires PHP 5.4 or above.</strong></p>
+	<p><strong>As of version 1.0.0, <em>Post Link Shortcodes</em> requires PHP 5.4 or above.</strong></p>
 	<p><a href="http://php.net/supported-versions.php" target="_blank">See here for more information on current supported versions of PHP.</a></p>
 </div>
 	<?php
