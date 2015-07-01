@@ -41,16 +41,16 @@ class PostLinkShortcode
 	protected $inner;
 
 	/* @var array */
-	protected $data = [ ];
+	protected $data = array();
 
 	/* @var array */
-	protected $attrs = [ ];
+	protected $attrs = array();
 
 	/* html attribute which should receive the url */
 	protected $url_attribute;
 
 	/* shortcode attributes reserved for output control */
-	protected $reserved_keys = [ 'post_id', 'slug', 'inner', 'text' ];
+	protected $reserved_keys = array( 'post_id', 'slug', 'inner', 'text' );
 
 	/* @deprecated 0.4.0 */
 	protected $_url;
@@ -59,13 +59,13 @@ class PostLinkShortcode
 	public function __construct( $atts, $content, $tag )
 	{
 		if ( ! is_array( $atts ) )
-			$atts = [ ];
+			$atts = array();
 
-		$this->data['orig'] = [
+		$this->data['orig'] = array(
 			'atts'    => $atts,
 			'content' => $content,
 			'tag'     => $tag,
-		];
+		);
 
 		$this->content = $content;
 
@@ -413,7 +413,7 @@ class PostLinkShortcode
 		 * @param array $attrs	current set of html attribute => value
 		 * @param array array() current shortcode object variables
 		 */
-		$allowed = [ ];
+		$allowed = array();
 
 		if ( 'link' == $this->request ) {
 			/**
@@ -478,7 +478,7 @@ class PostLinkShortcode
 		}
 
 		unset( $attrs[ $this->url_attribute ] );
-		$attrs = array_merge( [ $this->url_attribute => $this->get_url() ], $attrs );
+		$attrs = array_merge( array( $this->url_attribute => $this->get_url() ), $attrs );
 
 		// sanitize attribute values
 		return array_map( 'esc_attr', $attrs );
@@ -532,7 +532,7 @@ class PostLinkShortcode
 	protected function format_html_attributes( array $attributes )
 	{
 		// build html attribute string
-		$attr_pairs = [ ];
+		$attr_pairs = array();
 		foreach ( $attributes as $name => $value )
 		{
 			$value = $this->do_att_shortcode( $value );
@@ -554,7 +554,7 @@ class PostLinkShortcode
 	 */
 	protected function url_is_src()
 	{
-		if ( in_array( $this->request, ['src','img'] ) ) return true;
+		if ( in_array( $this->request, array( 'src','img' ) ) ) return true;
 
 		// href=src syntax
 		if ( ! empty( $this->data['href'] ) && 'src' == $this->data['href'] ) return true;
