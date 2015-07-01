@@ -31,6 +31,13 @@ class PostLinkShortcodes
 	 */
 	protected $aliases = array();
 
+	/**
+	 * Shortcodes which would be overridden
+	 * by a PLS shortcode of the same name
+	 * @var array
+	 */
+	protected $conflicts = array();
+
 	public function __construct() {}
 
 	/**
