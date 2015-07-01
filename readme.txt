@@ -7,7 +7,7 @@ Requires at least: 3.6
 Tested up to: 3.9
 License: GPLv2 or later
 
-A plugin for dynamically adding a collection of shortcodes for building links to a given post/archive (of any type) or simply returning the URL!
+A collection of shortcodes for building links, images, or URLs to a given post/archive of any type.
 
 == Description ==
 

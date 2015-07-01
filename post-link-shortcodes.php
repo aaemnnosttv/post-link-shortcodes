@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: Post Link Shortcodes
-	Description: A plugin for dynamically adding a collection of shortcodes for building links to a given post/archive (of any type) or simply returning the requested URL!
+	Description: A collection of shortcodes for building links, images, or URLs to a given post/archive of any type.
 	Version: 0.4.0
 	Author: Evan Mattson
 	Author URI: http://aaemnnost.tv
