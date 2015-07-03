@@ -182,30 +182,16 @@ class PostLinkShortcodes
             return apply_filters( 'pls/output/not_found', '', $sc->get_filter_data() );
         }
 
-        switch ( $sc->request )
-        {
-            case 'url' :
-            case 'src' :
-                $output = $sc->get_url();
-                break;
+        $method = array($sc, "get_{$sc->request}");
+        $output = is_callable( $method ) ? call_user_func( $method ) : '';
 
-            case 'link' :
-                $output = $sc->get_link();
-                break;
-
-            case 'img' :
-                $output = $sc->get_img();
-                break;
-
-            default:
-                /**
-                 * @filter 'pls/request/{request}'
-                 * @since 0.4.0
-                 * @param string output
-                 * @param object PostLinkShortcode
-                 */
-                $output = apply_filters( "pls/request/$sc->request", '', $sc );
-        }
+        /**
+         * @filter 'pls/{type}/{request}'
+         * @since 0.4.0
+         * @param string output
+         * @param object PostLinkShortcode
+         */
+        $output = apply_filters( "pls/$sc->type/$sc->request", $output, $sc );
 
         /**
          * Final output
