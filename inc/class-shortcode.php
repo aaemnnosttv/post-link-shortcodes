@@ -34,6 +34,9 @@ class PostLinkShortcode
     /* @var string */
     protected $url;
 
+    /* @var string */
+    protected $src;
+
     /* enclosed shortcode content */
     protected $content;
 
@@ -285,6 +288,16 @@ class PostLinkShortcode
     }
 
     /**
+     * @return bool|string
+     */
+    protected function setup_src()
+    {
+        if ( ! $this->get_object() ) return;
+
+        return $this->src = $this->get_attachment_src();
+    }
+
+    /**
      * Get the shortcode's target object
      */
     public function get_object()
@@ -321,6 +334,28 @@ class PostLinkShortcode
         $url = apply_filters( 'pls/url', $this->url, $this->get_filter_data() );
 
         return esc_url( $url );
+    }
+
+    /**
+     * Get the target src (attachment img, file, etc)
+     * @return string
+     */
+    public function get_src()
+    {
+        if ( ! isset( $this->src ) ) {
+            $this->setup_src();
+        }
+
+        /**
+         * The SRC
+         *
+         * @filter 'pls/src'
+         * @param (mixed) the SRC if found, or (bool) false on failure
+         * @param (array) current shortcode object variables
+         */
+        $src = apply_filters( 'pls/src', $this->src, $this->get_filter_data() );
+
+        return esc_url( $src );
     }
 
     /**
