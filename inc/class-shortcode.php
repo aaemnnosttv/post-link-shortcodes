@@ -280,10 +280,6 @@ class PostLinkShortcode
 
         if ( ! $obj = $this->get_object() ) return;
 
-        if ( $this->url_is_src() ) {
-            return $this->url = $this->get_attachment_src();
-        }
-
         return $this->url = ( $obj instanceof WP_Post ) ? get_permalink( $obj ) : false;
     }
 
@@ -315,8 +311,9 @@ class PostLinkShortcode
     }
 
     /**
-     * Get the target url
-     * @return bool (string|bool) The permalink URL, or false on failure (if the target doesn't exist).
+    /**
+     * Get the target url (permalink)
+     * @return string
      */
     public function get_url()
     {
