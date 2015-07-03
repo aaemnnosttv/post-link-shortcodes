@@ -1,29 +1,29 @@
 <?php
 /*
-	Plugin Name: Post Link Shortcodes
-	Description: A collection of shortcodes for building links, images, or URLs to a given post/archive of any type.
-	Version: 0.4.0
-	Author: Evan Mattson
-	Author URI: http://aaemnnost.tv
-	Plugin URI: https://github.com/aaemnnosttv/post-link-shortcodes
-	License: GPL2
+    Plugin Name: Post Link Shortcodes
+    Description: A collection of shortcodes for building links, images, or URLs to a given post/archive of any type.
+    Version: 0.4.0
+    Author: Evan Mattson
+    Author URI: http://aaemnnost.tv
+    Plugin URI: https://github.com/aaemnnosttv/post-link-shortcodes
+    License: GPL2
 */
 
 /*
-	Copyright 2013  Evan Mattson  (email : me at aaemnnost dot tv)
+    Copyright 2013  Evan Mattson  (email : me at aaemnnost dot tv)
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License, version 2, as
-	published by the Free Software Foundation.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License, version 2, as
+    published by the Free Software Foundation.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
@@ -41,13 +41,13 @@ PostLinkShortcodes();
  */
 function PostLinkShortcodes()
 {
-	static $plugin;
-	if ( ! $plugin ) {
-		$plugin = new PostLinkShortcodes();
-		$plugin->setup_hooks();
-	}
+    static $plugin;
+    if ( ! $plugin ) {
+        $plugin = new PostLinkShortcodes();
+        $plugin->setup_hooks();
+    }
 
-	return $plugin;
+    return $plugin;
 }
 
 /**
@@ -79,7 +79,7 @@ function PostLinkShortcodes()
  */
 function pls_add_shortcode_alias( $tag, $alias_of, $defaults = false )
 {
-	PostLinkShortcodes()->alias( $tag, $alias_of, $defaults );
+    PostLinkShortcodes()->alias( $tag, $alias_of, $defaults );
 }
 
 /**
@@ -87,11 +87,11 @@ function pls_add_shortcode_alias( $tag, $alias_of, $defaults = false )
  */
 function _pls_insufficient_php_version_notice()
 {
-	if ( ! current_user_can('activate_plugins') ) return;
-	?>
+    if ( ! current_user_can('activate_plugins') ) return;
+    ?>
 <div id="message" class="error">
-	<p><strong>As of version 1.0.0, <em>Post Link Shortcodes</em> requires PHP 5.4 or above.</strong></p>
-	<p><a href="http://php.net/supported-versions.php" target="_blank">See here for more information on current supported versions of PHP.</a></p>
+    <p><strong>As of version 1.0.0, <em>Post Link Shortcodes</em> requires PHP 5.4 or above.</strong></p>
+    <p><a href="http://php.net/supported-versions.php" target="_blank">See here for more information on current supported versions of PHP.</a></p>
 </div>
-	<?php
+    <?php
 }
