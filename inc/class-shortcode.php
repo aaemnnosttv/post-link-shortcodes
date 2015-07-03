@@ -611,7 +611,7 @@ class PostLinkShortcode
      * Whether or not the url should return an src, rather than permalink
      * @return bool
      */
-    protected function url_is_src()
+    public function is_src()
     {
         if ( in_array( $this->request, array( 'src','img' ) ) ) return true;
 
