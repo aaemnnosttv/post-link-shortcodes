@@ -311,6 +311,16 @@ class PostLinkShortcode
     }
 
     /**
+     * Get the proper URI based on the request
+     * @return string
+     */
+    public function get_uri()
+    {
+        return $this->is_src()
+            ? $this->get_src()
+            : $this->get_url();
+    }
+
     /**
      * Get the target url (permalink)
      * @return string
@@ -537,7 +547,7 @@ class PostLinkShortcode
         }
 
         unset( $attrs[ $this->url_attribute ] );
-        $attrs = array_merge( array( $this->url_attribute => $this->get_url() ), $attrs );
+        $attrs = array_merge( array( $this->url_attribute => $this->get_uri() ), $attrs );
 
         // sanitize attribute values
         return array_map( 'esc_attr', $attrs );
