@@ -182,7 +182,6 @@ The two filters may be used together.
 == Changelog ==
 
 = 0.4.0 =
-* Requires PHP 5.4 or above
 * NEW: attachment_src and attachment_img shortcodes
 * NEW: added filters
 * Various improvements and optimizations under the hood
