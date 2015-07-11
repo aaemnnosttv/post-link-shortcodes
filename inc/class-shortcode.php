@@ -231,6 +231,8 @@ class PostLinkShortcode
         // dynamic
         if ( $this->archive )
         {
+            $inner = $this->obj->labels->name;
+
             /**
              * Archive link text
              * @filter 'pls/archive_text'
@@ -246,9 +248,13 @@ class PostLinkShortcode
                     "The filter tag 'pls/archive_text' is deprecated.'
                     Use 'pls/inner' instead."
                 );
+                $inner = apply_filters( 'pls/archive_text', $inner, $this->obj, $this->get_filter_data() );
             }
-            return $this->inner = apply_filters( 'pls/archive_text', $this->obj->labels->name, $this->obj, $this->get_filter_data() );
+
+            return $this->inner = $inner;
         }
+
+        $inner = $this->obj->post_title;
 
         /**
          * Single post link text
@@ -265,8 +271,10 @@ class PostLinkShortcode
                 "The filter tag 'pls/single_text' is deprecated.'
                 Use 'pls/inner' instead."
             );
+            $inner = apply_filters( 'pls/single_text', $inner, $this->obj, $this->get_filter_data() );
         }
-        return $this->inner = apply_filters( 'pls/single_text', $this->obj->post_title, $this->obj, $this->get_filter_data() );
+        
+        return $this->inner = $inner;
     }
 
     /**
@@ -397,6 +405,8 @@ class PostLinkShortcode
     {
         $html_attributes = $this->format_html_attributes( $this->get_attrs() );
 
+        $inner = $this->get_inner();
+
         /**
          * Inner link text/html
          *
@@ -414,8 +424,8 @@ class PostLinkShortcode
                 "The filter tag 'pls/link_text' is deprecated.'
                 Use 'pls/inner' instead."
             );
+            $inner = apply_filters( 'pls/link_text', $inner, $this->get_filter_data() );
         }
-        $inner = apply_filters( 'pls/link_text', $this->get_inner(), $this->get_filter_data() );
 
         /**
          * The final link markup
