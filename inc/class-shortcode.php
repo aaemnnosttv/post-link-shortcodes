@@ -115,13 +115,15 @@ class PostLinkShortcode
                 $this->element = 'a';
                 $this->url_attribute = 'href';
                 break;
+
             case 'img' :
                 $this->element = 'img';
                 $this->url_attribute = 'src';
-                array_push($this->reserved_keys, 'size');
+                array_push( $this->reserved_keys, 'size' );
                 break;
+
             case 'src' :
-                array_push($this->reserved_keys, 'size');
+                array_push( $this->reserved_keys, 'size' );
                 break;
         }
 
@@ -280,7 +282,7 @@ class PostLinkShortcode
             );
             $inner = apply_filters( 'pls/single_text', $inner, $this->obj, $this->get_filter_data() );
         }
-        
+
         return $this->inner = $inner;
     }
 
