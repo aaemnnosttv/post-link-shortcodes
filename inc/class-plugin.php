@@ -140,23 +140,25 @@ class PostLinkShortcodes
     }
 
     /**
+     * Registers a new post link shortcode without overriding
+     * an existing shortcode by the same name.
      * @param       $tag
      */
     protected function register_shortcode( $tag )
     {
-        global $shortcode_tags;
+        array_push( $this->shortcodes[ 'all' ], $tag );
 
-        $this->shortcodes[ 'all' ][ ] = $tag;
-
-        if ( ! shortcode_exists( $tag, $shortcode_tags ) )
+        if ( shortcode_exists( $tag ) )
         {
-            add_shortcode( $tag, array($this, 'handler') );
-            $this->shortcodes[ 'registered' ][ ] = $tag;
-        }
-        else
-        {
+            global $shortcode_tags;
             $this->conflicts[ $tag ] = $shortcode_tags[ $tag ];
+
+            return;
         }
+
+        add_shortcode( $tag, array($this, 'handler') );
+
+        array_push( $this->shortcodes[ 'registered' ], $tag );
     }
 
     /**
