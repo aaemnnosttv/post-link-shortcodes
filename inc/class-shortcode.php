@@ -37,10 +37,10 @@ class PostLinkShortcode
     /* @var string */
     protected $src;
 
-    /* enclosed shortcode content */
+    /* @var string  enclosed shortcode content */
     protected $content;
 
-    /* element inner content */
+    /* @var string  element inner content */
     protected $inner;
 
     /* @var array */
@@ -49,16 +49,23 @@ class PostLinkShortcode
     /* @var array */
     protected $attrs = array();
 
-    /* html attribute which should receive the url */
+    /* @var string  html attribute which should receive the url */
     protected $url_attribute;
 
-    /* shortcode attributes reserved for output control */
+    /* @var array  shortcode attributes reserved for output control */
     protected $reserved_keys = array( 'post_id', 'slug', 'inner', 'text' );
 
     /* @deprecated 0.4.0 */
     protected $_url;
 
 
+	/**
+     * Create a new PostLinkShortcode
+     *
+     * @param $atts
+     * @param $content
+     * @param $tag
+     */
     public function __construct( $atts, $content, $tag )
     {
         if ( ! is_array( $atts ) )
