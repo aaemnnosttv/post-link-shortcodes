@@ -11,7 +11,7 @@ A collection of shortcodes for building links, images, or URLs to a given post/a
 
 == Description ==
 
-Aptly titled *Post Link Shortcodes*, the plugin dynamically creates shortcodes for each registered post type.  These shortcodes can be used to create an html anchor to the post, post type archive or just return the URL for either.
+This plugin dynamically adds a collection of helpful shortcodes for each registered post type.  These shortcodes can be used to return URLs, or generate HTML elements like anchors and images to the related post!
 
 Each post type will have 2 shortcodes created for it where `{type}` is the name of the post type. Eg: `post` or `page`
 
@@ -33,24 +33,37 @@ Attachment shortcodes
 `[attachment_src]
 [attachment_img]`
 
-**[Read the Documentation](https://github.com/aaemnnosttv/post-link-shortcodes/wiki)**
+`[post_src hello-world]
+[post_img hello-world size=medium]`
+
+**For more information and examples: [Read the Documentation](https://github.com/aaemnnosttv/post-link-shortcodes/wiki)**
+
+== Screenshots ==
+
+1. Basic usage. Source shortcode, with html-escaped output in blue.
+1. Post thumbnail usage.  Works for any post type which supports post thumbnails as well as attachments. Source shortcode, with html-escaped output in blue.
+1. Attachment examples. Source shortcode, with html-escaped output in blue.
 
 == More ==
 
 [Post Link Shortcodes on GitHub!](https://github.com/aaemnnosttv/Post-Link-Shortcodes)
-
-
 
 == Installation ==
 
 1. Upload the `post-link-shortcodes` folder to the `/wp-content/plugins/` directory.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 
+== Upgrade Notice ==
+
+= 0.4.0 =
+Big update - many new features, filters and improvements all around.
+
 
 == Changelog ==
 
 = 0.4.0 =
-* NEW: attachment_src and attachment_img shortcodes
+* NEW: `attachment_src` and `attachment_img` shortcodes
+* NEW: `{type}_src` and `{type}_img` shortcodes for types that support post thumbnails
 * NEW: added filters
 * Various improvements and optimizations under the hood
 * Added support for boolean html attributes 
