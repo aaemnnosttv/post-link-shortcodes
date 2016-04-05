@@ -126,10 +126,10 @@ class PostLinkShortcodes
     {
         foreach ( array( 'url', 'link' ) as $request ) {
             $this->register_shortcode( "{$type->name}_$request" );
-        }
 
-        if ( $type->has_archive ) {
-            $this->register_shortcode( "{$type->name}_archive_$request" );
+            if ( $type->has_archive ) {
+                $this->register_shortcode( "{$type->name}_archive_$request" );
+            }
         }
 
         if ( post_type_supports( $type->name, 'thumbnail' ) )
