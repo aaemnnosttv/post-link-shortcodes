@@ -7,10 +7,23 @@ class CustomPostTypeShortcodesTest extends WP_UnitTestCase
     /**
 	 * @test
 	 */
-	function it_registers_shortcodes_for_xyz_public_cpt()
+	function it_registers_shortcodes_for_show_ui_cpts()
 	{
+		$this->assertShortcodeNotExists('secret_url');
+		$this->assertShortcodeNotExists('secret_link');
+
 		$this->assertShortcodeExists('xyz_url');
 		$this->assertShortcodeExists('xyz_link');
+
+		$this->assertShortcodeExists('cpt-with-dashes_url');
+		$this->assertShortcodeExists('cpt-with-dashes_link');
+		$this->assertShortcodeExists('cpt-with-dashes_src');
+		$this->assertShortcodeExists('cpt-with-dashes_img');
+
+		$this->assertShortcodeExists('cpt_with_underscores_url');
+		$this->assertShortcodeExists('cpt_with_underscores_link');
+		$this->assertShortcodeExists('cpt_with_underscores_src');
+		$this->assertShortcodeExists('cpt_with_underscores_img');
 	}
 
 	/**
