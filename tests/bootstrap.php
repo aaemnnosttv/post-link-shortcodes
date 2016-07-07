@@ -28,7 +28,12 @@ tests_add_filter('init', function () {
     register_post_type('xyz', ['show_ui' => true]);
     register_post_type('secret', ['show_ui' => false]);
 
-    $args = ['public' => true, 'show_ui' => true, 'has_archive' => true];
+    $args = [
+        'public' => true,
+        'show_ui' => true,
+        'has_archive' => true,
+        'supports' => ['title','editor','thumbnail']
+    ];
     register_post_type('cpt-with-dashes', $args);
     register_post_type('cpt_with_underscores', $args);
 });
