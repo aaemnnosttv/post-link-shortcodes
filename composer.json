@@ -1,0 +1,13 @@
+{
+    "name": "aaemnnosttv/post-link-shortcodes",
+    "description": "A collection of shortcodes for building links, images, or URLs to a given post/archive of any type.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Evan Mattson",
+            "email": "me@aaemnnost.tv"
+        }
+    ],
+    "require": {}
+}
