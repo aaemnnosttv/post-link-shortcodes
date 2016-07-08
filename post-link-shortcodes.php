@@ -2,7 +2,7 @@
 /*
     Plugin Name: Post Link Shortcodes
     Description: A collection of shortcodes for building links, images, or URLs to a given post/archive of any type.
-    Version: 0.4.0
+    Version: 0.4.1
     Author: Evan Mattson
     Author URI: http://aaemnnost.tv
     Plugin URI: https://github.com/aaemnnosttv/post-link-shortcodes
