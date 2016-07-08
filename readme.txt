@@ -55,11 +55,14 @@ Attachment shortcodes
 
 == Upgrade Notice ==
 
-= 0.4.0 =
-Big update - many new features, filters and improvements all around.
+= 0.4.1 =
+Fixed unregistered `{type}_archive_url` shortcode
 
 
 == Changelog ==
+
+= 0.4.1 =
+* FIXED: Unregistered `{type}_archive_url` shortcode
 
 = 0.4.0 =
 * NEW: `attachment_src` and `attachment_img` shortcodes
