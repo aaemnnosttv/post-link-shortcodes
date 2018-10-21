@@ -2,12 +2,25 @@
     "name": "aaemnnosttv/post-link-shortcodes",
     "description": "A collection of shortcodes for building links, images, or URLs to a given post/archive of any type.",
     "type": "wordpress-plugin",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Evan Mattson",
             "email": "me@aaemnnost.tv"
         }
     ],
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "johnpbloch/wordpress": "^4.9",
+        "wp-phpunit/wp-phpunit": "^4.9",
+        "phpunit/phpunit": "^4.8 || ^5 || ^6"
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/src"
+        ]
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
 }
