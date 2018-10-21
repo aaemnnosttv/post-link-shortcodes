@@ -2,3 +2,4 @@
 .svn
 /wordpress
 /vendor
+/composer.lock
