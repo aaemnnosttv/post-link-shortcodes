@@ -1,28 +1,33 @@
 language: php
 
-notifications:
-  email:
-    on_success: never
-    on_failure: change
-
-branches:
-  only:
-    - master
+env:
+  global:
+    - WP_DB_USER=wp
+    - WP_DB_PASS=password
+    - WP_DB_NAME=wp_tests
+    - WP_VERSION=*
 
 php:
-  - 5.6
-  - 7.0
+  - 7.2
   - 7.1
-
-env:
-  - WP_VERSION=latest WP_MULTISITE=0
+  - 7.0
+  - 5.6
 
 matrix:
   include:
+    - php: 7.2
+      env: WP_VERSION=4.8.0
     - php: 5.6
-      env: WP_VERSION=latest WP_MULTISITE=1
+      env: WP_VERSION=4.4.0
 
 before_script:
-  - bash tests/bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON ${WP_DB_NAME}.* TO ${WP_DB_USER} IDENTIFIED BY '${WP_DB_PASS}';"
+  - mysql -u root -e "CREATE DATABASE ${WP_DB_NAME};"
 
-script: phpunit
+install:
+  - composer validate --strict
+  - composer require --dev --no-update johnpbloch/wordpress:${WP_VERSION} wp-phpunit/wp-phpunit:${WP_VERSION}
+  - composer install
+  - composer show
+
+script: composer test
